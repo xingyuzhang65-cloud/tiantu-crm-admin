@@ -167,6 +167,21 @@ export default function EditDrawer({ open, record, onClose, onSave }: EditDrawer
                 <Select.Option value="DE">德国</Select.Option>
               </Select>
             </Form.Item>
+            <Form.Item name="customsMethod" label="报关方式" rules={[{ required: true, message: '请选择' }]}>
+              <Select placeholder="请选择">
+                <Select.Option value="general">一般贸易</Select.Option>
+                <Select.Option value="cross-border">跨境电商</Select.Option>
+                <Select.Option value="personal">个人物品</Select.Option>
+              </Select>
+            </Form.Item>
+            <Form.Item name="tradeMethod" label="贸易方式" rules={[{ required: true, message: '请选择' }]}>
+              <Select placeholder="请选择">
+                <Select.Option value="FOB">FOB</Select.Option>
+                <Select.Option value="CIF">CIF</Select.Option>
+                <Select.Option value="EXW">EXW</Select.Option>
+                <Select.Option value="DAP">DAP</Select.Option>
+              </Select>
+            </Form.Item>
             <Form.Item name="clearanceMethod" label="清关方式" rules={[{ required: true, message: '请选择' }]}>
               <Select placeholder="请选择">
                 <Select.Option value="DDP">DDP</Select.Option>
@@ -263,13 +278,6 @@ export default function EditDrawer({ open, record, onClose, onSave }: EditDrawer
                 <Select.Option value="海运">海运</Select.Option>
                 <Select.Option value="空运">空运</Select.Option>
                 <Select.Option value="陆运">陆运</Select.Option>
-              </Select>
-            </Form.Item>
-            <Form.Item name="customsMethod" label="报关方式" rules={[{ required: true, message: '请选择' }]}>
-              <Select placeholder="请选择">
-                <Select.Option value="general">一般贸易</Select.Option>
-                <Select.Option value="cross-border">跨境电商</Select.Option>
-                <Select.Option value="personal">个人物品</Select.Option>
               </Select>
             </Form.Item>
             <Form.Item name="waybillPrefix" label="运单前缀" rules={[{ required: true, message: '请输入' }]}>

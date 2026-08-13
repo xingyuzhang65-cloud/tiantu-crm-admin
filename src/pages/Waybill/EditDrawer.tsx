@@ -321,6 +321,26 @@ export default function EditWaybillDrawer({ open, record, onClose, onSave }: Edi
             </Form.Item>
           </Col>
           <Col span={8}>
+            <Form.Item name="tradeMethod" label="贸易方式">
+              <Select placeholder="请选择">
+                <Select.Option value="FOB">FOB</Select.Option>
+                <Select.Option value="CIF">CIF</Select.Option>
+                <Select.Option value="EXW">EXW</Select.Option>
+                <Select.Option value="DAP">DAP</Select.Option>
+              </Select>
+            </Form.Item>
+          </Col>
+          <Col span={8}>
+            <Form.Item name="clearanceMethod" label="清关方式">
+              <Select placeholder="请选择">
+                <Select.Option value="DDP">DDP</Select.Option>
+                <Select.Option value="DDU">DDU</Select.Option>
+              </Select>
+            </Form.Item>
+          </Col>
+        </Row>
+        <Row gutter={24}>
+          <Col span={8}>
             <Form.Item name="insurance" label="保险">
               <Select placeholder="请选择">
                 <Select.Option value="yes">是</Select.Option>
