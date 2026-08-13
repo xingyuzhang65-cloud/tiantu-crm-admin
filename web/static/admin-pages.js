@@ -90,7 +90,7 @@
       const attr = node.hasAttribute('href') ? 'href' : 'src';
       const value = node.getAttribute(attr);
       if (value.startsWith('/static/')) node.setAttribute(attr, prefix + value);
-      else if (!value.startsWith('/api/')) node.setAttribute(attr, prefix + (value === '/' ? '/' : value));
+      else if (!value.startsWith('/api/') && !value.startsWith(prefix)) node.setAttribute(attr, prefix + (value === '/' ? '/' : value));
     });
     document.querySelectorAll('[onclick]').forEach(function (node) {
       const value = node.getAttribute('onclick');
