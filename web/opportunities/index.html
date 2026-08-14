@@ -1,0 +1,1136 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>跨境物流CRM - ShareAI</title>
+<link rel="stylesheet" href="/tiantu-crm-admin/web/static/css/style.css">
+  <script src="/tiantu-crm-admin/web/static/crm-reference-data.js"></script>
+  <script src="/tiantu-crm-admin/web/static/admin-pages.js"></script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <h2>🚢 跨境物流CRM</h2>
+      <div class="sub">Powered by ShareAI 智能引擎</div>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="/" class="">
+        <span class="icon">📊</span> 经营仪表盘
+      </a>
+      <a href="/leads" class="">
+        <span class="icon">🎯</span> 线索公海池
+      </a>
+      <a href="/customers" class="active">
+        <span class="icon">👥</span> 客户管理与商机
+      </a>
+      <a href="/quotation" class="">
+        <span class="icon">💰</span> 报价管理
+      </a>
+      <a href="/tracking" class="">
+        <span class="icon">📍</span> 轨迹与客服
+      </a>
+      <a href="/risk" class="">
+        <span class="icon">🛡️</span> 风控授信
+      </a>
+      <a href="/analytics" class="">
+        <span class="icon">📈</span> 经营分析
+      </a>
+      <a href="/moments" class="">
+        <span class="icon">📱</span> 团队广场
+        <span class="sidebar-badge">NEW</span>
+      </a>
+      <a href="/ai-assistant" class="">
+        <span class="icon">🤖</span> AI智能助手
+        <span class="sidebar-badge">AI</span>
+      </a>
+    </nav>
+    <div style="position:absolute;bottom:20px;left:20px;right:20px;font-size:11px;color:rgba(255,255,255,.4);">
+      结合纷享销客 ShareAI · 天图架构
+    </div>
+  </aside>
+  <main class="main">
+    
+<div class="workspace-switch" style="display:flex;gap:8px;align-items:center;margin-bottom:14px;">
+  <a class="btn btn-primary btn-sm" href="/tiantu-crm-admin/web/opportunities/">客户与商机</a>
+  <a class="btn btn-outline btn-sm" href="/tiantu-crm-admin/web/customers/">客户管理</a>
+  <a class="btn btn-outline btn-sm" href="/leads">线索公海池</a>
+</div>
+<style>
+/* ── PRD V2.0 客户卡片样式 ── */
+.status-tabs { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:20px; }
+.status-tabs button { border-radius:20px; padding:6px 16px; font-size:12px; border:1px solid var(--border); background:#fff; color:var(--text-secondary); cursor:pointer; transition:all .2s; font-weight:500; }
+.status-tabs button:hover { border-color:var(--primary-light); color:var(--primary-light); }
+.status-tabs button.active { background:var(--primary-light); color:#fff; border-color:var(--primary-light); }
+.status-tabs button.warning-tab { border-color:#ef4444; color:#ef4444; position:relative; }
+.status-tabs button.warning-tab:hover { background:#fef2f2; }
+.status-tabs button.warning-tab.active { background:#ef4444; color:#fff; border-color:#ef4444; }
+.warning-badge { display:inline-block; background:#fff; color:#ef4444; border-radius:10px; padding:0 6px; font-size:11px; margin-left:4px; font-weight:700; }
+
+.customer-card { margin-bottom:16px; cursor:pointer; transition:box-shadow .2s; border-left:3px solid transparent; }
+.customer-card:hover { box-shadow:0 4px 12px rgba(0,0,0,.1); }
+.customer-card.warning { border-left-color:#ef4444; background:#fff5f5; }
+
+.card-top { display:flex; align-items:flex-start; justify-content:space-between; gap:16px; }
+.card-info { flex:1; min-width:0; }
+.card-name { font-size:15px; font-weight:600; color:var(--text); }
+.card-tags { display:flex; gap:6px; margin-top:4px; flex-wrap:wrap; align-items:center; }
+
+.card-body { display:grid; grid-template-columns:1fr 1fr 1fr auto; gap:16px; padding:12px 0; }
+.card-section { }
+.card-section .label { font-size:11px; color:var(--text-secondary); text-transform:uppercase; letter-spacing:.5px; margin-bottom:4px; }
+.card-section .value { font-size:14px; font-weight:500; }
+
+.metric-value { cursor:pointer; position:relative; transition:color .15s; }
+.metric-value:hover { color:var(--primary-light); text-decoration:underline; }
+
+.trend-arrow { display:inline-block; font-size:14px; margin-left:4px; font-weight:700; }
+.trend-up { color:#10b981; }
+.trend-down { color:#ef4444; }
+.trend-mild { color:#f59e0b; }
+.trend-flat { color:var(--text-secondary); }
+
+.freq-tag { display:inline-block; padding:2px 8px; border-radius:10px; font-size:11px; font-weight:600; }
+.freq-tag.Daily { background:#dcfce7; color:#166534; }
+.freq-tag.Weekly { background:#dbeafe; color:#1e40af; }
+.freq-tag.Monthly { background:#fef3c7; color:#92400e; }
+.freq-tag.Inactive { background:#f1f5f9; color:#64748b; }
+
+.warning-tag { display:inline-block; padding:2px 8px; border-radius:10px; font-size:11px; font-weight:700; background:#fee2e2; color:#dc2626; animation:pulse-warn 2s infinite; }
+@keyframes pulse-warn { 0%,100%{opacity:1} 50%{opacity:.6} }
+
+.status-dropdown-btn { padding:5px 14px; border-radius:12px; font-size:12px; border:none; cursor:pointer; font-weight:500; }
+.status-dropdown-btn.new, .status-dropdown-btn.contacted { background:#dbeafe; color:#1e40af; }
+.status-dropdown-btn.nurturing { background:#e0e7ff; color:#3730a3; }
+.status-dropdown-btn.quoted { background:#ede9fe; color:#5b21b6; }
+.status-dropdown-btn.negotiating { background:#fef3c7; color:#92400e; }
+.status-dropdown-btn.trial { background:#fce7f3; color:#9d174d; }
+.status-dropdown-btn.active { background:#d1fae5; color:#065f46; }
+.status-dropdown-btn.receding { background:#fef3c7; color:#92400e; }
+.status-dropdown-btn.churned { background:#fee2e2; color:#991b1b; }
+.status-dropdown-btn.disqualified { background:#f1f5f9; color:#475569; }
+
+/* 6-month trend popup */
+.trend-popup { position:absolute; bottom:100%; left:50%; transform:translateX(-50%); background:#fff; border:1px solid var(--border); border-radius:8px; box-shadow:0 4px 16px rgba(0,0,0,.12); padding:12px 16px; z-index:50; min-width:260px; display:none; }
+.trend-popup.show { display:block; }
+.trend-bars { display:flex; align-items:flex-end; gap:6px; height:80px; margin-top:8px; }
+.trend-bar { flex:1; border-radius:3px 3px 0 0; position:relative; min-width:28px; transition:height .3s; }
+.trend-bar-label { font-size:10px; color:var(--text-secondary); text-align:center; margin-top:4px; }
+.trend-bar-val { font-size:10px; text-align:center; color:var(--text); }
+</style>
+
+<div class="flex-between mb-2">
+  <h1 style="font-size:22px;">👥 客户与商机管理 <span style="font-size:13px;color:var(--text-secondary);font-weight:400;">PRD V2.0</span></h1>
+  <div style="display:flex;gap:8px;">
+    <input type="text" id="searchInput" placeholder="搜索客户名称/联系人..." style="padding:8px 14px;border:1px solid var(--border);border-radius:8px;width:220px;"
+      oninput="applyFilters()">
+  </div>
+</div>
+
+<!-- PRD V2: 顶部4阶段+预警Tab导航 -->
+<div class="status-tabs" id="statusTabs">
+  <button class="active" data-stage="all" onclick="setStageFilter('all', this)">全部</button>
+  
+  <button data-stage="developing" onclick="setStageFilter('developing', this)">开发中</button>
+  
+  <button data-stage="quoted" onclick="setStageFilter('quoted', this)">已报价</button>
+  
+  <button data-stage="cooperating" onclick="setStageFilter('cooperating', this)">合作中</button>
+  
+  <button data-stage="churned" onclick="setStageFilter('churned', this)">已流失</button>
+  
+  <button class="warning-tab" data-stage="warning" onclick="setStageFilter('warning', this)">
+    ⚠️ 预警中
+    
+  </button>
+</div>
+
+<!-- 客户卡片列表 -->
+<div id="customerList">
+  
+  
+  <div class="panel customer-card "
+       data-stage="quoted"
+       data-warning="false"
+       data-search="宁波远洋国际贸易有限公司 周董 大型机械设备 盐田-洛杉矶,上海-鹿特丹"
+       data-cid="3">
+
+    <!-- 卡片顶部 -->
+    <div class="panel-header" onclick="location.href='/customer/3'" style="cursor:pointer;">
+      <div class="card-top">
+        <div class="card-info">
+          <span class="card-name">宁波远洋国际贸易有限公司</span>
+          <div class="card-tags">
+            <span class="badge badge-blue">B级</span>
+            
+            
+            <!-- V2 stage label -->
+            <span style="font-size:10px;color:var(--text-secondary);background:#f1f5f9;padding:2px 8px;border-radius:10px;">已报价</span>
+            
+            <span style="font-size:11px;color:var(--primary-light);" title="跟进人">👤 张晓明</span>
+            
+          </div>
+        </div>
+        <div style="flex-shrink:0;display:flex;gap:6px;align-items:center;">
+          <button class="status-dropdown-btn negotiating"
+                  onclick="event.stopPropagation();showStatusPicker(3, 'negotiating')">
+            商务谈判 ▾
+          </button>
+          <button class="btn btn-outline btn-sm" style="font-size:11px;padding:4px 10px;"
+                  onclick="event.stopPropagation();showQuickFollowUp(3, '宁波远洋国际贸易有限公司')">
+            + 跟进
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 卡片中部: 业务信息 + 数据看板 -->
+    <div class="panel-body" style="padding:12px 20px 16px;">
+      <div class="card-body">
+        <!-- 业务信息 -->
+        <div class="card-section">
+          <div class="label">主营品类</div>
+          <div class="value">大型机械设备</div>
+        </div>
+        <div class="card-section">
+          <div class="label">发货频率</div>
+          <div class="value">monthly</div>
+        </div>
+        <div class="card-section">
+          <div class="label">常走路线</div>
+          <div class="value" style="font-size:12px;">盐田-洛杉矶,上海-鹿特丹</div>
+        </div>
+
+        <!-- 数据看板: 月均货量(MoM) + 月均营收 -->
+        <div class="card-section" style="position:relative;">
+          <div class="label">月均货量</div>
+          <div class="value metric-value" onclick="event.stopPropagation();openVolumeTrend(3, '宁波远洋国际贸易有限公司')" title="点击查看近6个月货量走势">
+            <span style="">
+              200.0方
+            </span>
+            
+            <span class="trend-arrow trend-up">▲100%</span>
+            
+          </div>
+        </div>
+        <div class="card-section">
+          <div class="label">月均营收</div>
+          <div class="value" style="font-weight:700;font-size:16px;">¥680,000</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  
+  
+  <div class="panel customer-card "
+       data-stage="cooperating"
+       data-warning="false"
+       data-search="义乌欧凯进出口有限公司 王芳 小商品/日用百货 中欧班列,卡航"
+       data-cid="2">
+
+    <!-- 卡片顶部 -->
+    <div class="panel-header" onclick="location.href='/customer/2'" style="cursor:pointer;">
+      <div class="card-top">
+        <div class="card-info">
+          <span class="card-name">义乌欧凯进出口有限公司</span>
+          <div class="card-tags">
+            <span class="badge badge-green">A级</span>
+            
+            
+            <!-- V2 stage label -->
+            <span style="font-size:10px;color:var(--text-secondary);background:#f1f5f9;padding:2px 8px;border-radius:10px;">合作中</span>
+            
+            <span style="font-size:11px;color:var(--primary-light);" title="跟进人">👤 李强</span>
+            
+          </div>
+        </div>
+        <div style="flex-shrink:0;display:flex;gap:6px;align-items:center;">
+          <button class="status-dropdown-btn trial"
+                  onclick="event.stopPropagation();showStatusPicker(2, 'trial')">
+            试单中 ▾
+          </button>
+          <button class="btn btn-outline btn-sm" style="font-size:11px;padding:4px 10px;"
+                  onclick="event.stopPropagation();showQuickFollowUp(2, '义乌欧凯进出口有限公司')">
+            + 跟进
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 卡片中部: 业务信息 + 数据看板 -->
+    <div class="panel-body" style="padding:12px 20px 16px;">
+      <div class="card-body">
+        <!-- 业务信息 -->
+        <div class="card-section">
+          <div class="label">主营品类</div>
+          <div class="value">小商品/日用百货</div>
+        </div>
+        <div class="card-section">
+          <div class="label">发货频率</div>
+          <div class="value">daily</div>
+        </div>
+        <div class="card-section">
+          <div class="label">常走路线</div>
+          <div class="value" style="font-size:12px;">中欧班列,卡航</div>
+        </div>
+
+        <!-- 数据看板: 月均货量(MoM) + 月均营收 -->
+        <div class="card-section" style="position:relative;">
+          <div class="label">月均货量</div>
+          <div class="value metric-value" onclick="event.stopPropagation();openVolumeTrend(2, '义乌欧凯进出口有限公司')" title="点击查看近6个月货量走势">
+            <span style="">
+              120.0方
+            </span>
+            
+            <span class="trend-arrow trend-up">▲100%</span>
+            
+          </div>
+        </div>
+        <div class="card-section">
+          <div class="label">月均营收</div>
+          <div class="value" style="font-weight:700;font-size:16px;">¥420,000</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  
+  
+  <div class="panel customer-card "
+       data-stage="cooperating"
+       data-warning="false"
+       data-search="深圳思科达电子有限公司 陈总 带电产品(电池) 美森快船,盐田普船"
+       data-cid="1">
+
+    <!-- 卡片顶部 -->
+    <div class="panel-header" onclick="location.href='/customer/1'" style="cursor:pointer;">
+      <div class="card-top">
+        <div class="card-info">
+          <span class="card-name">深圳思科达电子有限公司</span>
+          <div class="card-tags">
+            <span class="badge badge-green">A级</span>
+            
+            <span class="freq-tag Daily">Daily</span>
+            
+            
+            <!-- V2 stage label -->
+            <span style="font-size:10px;color:var(--text-secondary);background:#f1f5f9;padding:2px 8px;border-radius:10px;">合作中</span>
+            
+            <span style="font-size:11px;color:var(--primary-light);" title="跟进人">👤 张晓明</span>
+            
+          </div>
+        </div>
+        <div style="flex-shrink:0;display:flex;gap:6px;align-items:center;">
+          <button class="status-dropdown-btn active"
+                  onclick="event.stopPropagation();showStatusPicker(1, 'active')">
+            正式合作 ▾
+          </button>
+          <button class="btn btn-outline btn-sm" style="font-size:11px;padding:4px 10px;"
+                  onclick="event.stopPropagation();showQuickFollowUp(1, '深圳思科达电子有限公司')">
+            + 跟进
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 卡片中部: 业务信息 + 数据看板 -->
+    <div class="panel-body" style="padding:12px 20px 16px;">
+      <div class="card-body">
+        <!-- 业务信息 -->
+        <div class="card-section">
+          <div class="label">主营品类</div>
+          <div class="value">带电产品(电池)</div>
+        </div>
+        <div class="card-section">
+          <div class="label">发货频率</div>
+          <div class="value">weekly</div>
+        </div>
+        <div class="card-section">
+          <div class="label">常走路线</div>
+          <div class="value" style="font-size:12px;">美森快船,盐田普船</div>
+        </div>
+
+        <!-- 数据看板: 月均货量(MoM) + 月均营收 -->
+        <div class="card-section" style="position:relative;">
+          <div class="label">月均货量</div>
+          <div class="value metric-value" onclick="event.stopPropagation();openVolumeTrend(1, '深圳思科达电子有限公司')" title="点击查看近6个月货量走势">
+            <span style="">
+              45.5方
+            </span>
+            
+            <span class="trend-arrow trend-up">▲100%</span>
+            
+          </div>
+        </div>
+        <div class="card-section">
+          <div class="label">月均营收</div>
+          <div class="value" style="font-weight:700;font-size:16px;">¥285,000</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  
+  
+  <div class="panel customer-card "
+       data-stage="quoted"
+       data-warning="false"
+       data-search="AmazonSeller-DE GmbH Michael Braun 普货(家居用品) 海派FBA-DEU"
+       data-cid="4">
+
+    <!-- 卡片顶部 -->
+    <div class="panel-header" onclick="location.href='/customer/4'" style="cursor:pointer;">
+      <div class="card-top">
+        <div class="card-info">
+          <span class="card-name">AmazonSeller-DE GmbH</span>
+          <div class="card-tags">
+            <span class="badge badge-blue">B级</span>
+            
+            
+            <!-- V2 stage label -->
+            <span style="font-size:10px;color:var(--text-secondary);background:#f1f5f9;padding:2px 8px;border-radius:10px;">已报价</span>
+            
+          </div>
+        </div>
+        <div style="flex-shrink:0;display:flex;gap:6px;align-items:center;">
+          <button class="status-dropdown-btn quoted"
+                  onclick="event.stopPropagation();showStatusPicker(4, 'quoted')">
+            已报价 ▾
+          </button>
+          <button class="btn btn-outline btn-sm" style="font-size:11px;padding:4px 10px;"
+                  onclick="event.stopPropagation();showQuickFollowUp(4, 'AmazonSeller-DE GmbH')">
+            + 跟进
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 卡片中部: 业务信息 + 数据看板 -->
+    <div class="panel-body" style="padding:12px 20px 16px;">
+      <div class="card-body">
+        <!-- 业务信息 -->
+        <div class="card-section">
+          <div class="label">主营品类</div>
+          <div class="value">普货(家居用品)</div>
+        </div>
+        <div class="card-section">
+          <div class="label">发货频率</div>
+          <div class="value">weekly</div>
+        </div>
+        <div class="card-section">
+          <div class="label">常走路线</div>
+          <div class="value" style="font-size:12px;">海派FBA-DEU</div>
+        </div>
+
+        <!-- 数据看板: 月均货量(MoM) + 月均营收 -->
+        <div class="card-section" style="position:relative;">
+          <div class="label">月均货量</div>
+          <div class="value metric-value" onclick="event.stopPropagation();openVolumeTrend(4, 'AmazonSeller-DE GmbH')" title="点击查看近6个月货量走势">
+            <span style="">
+              32.0方
+            </span>
+            
+            <span class="trend-arrow trend-up">▲100%</span>
+            
+          </div>
+        </div>
+        <div class="card-section">
+          <div class="label">月均营收</div>
+          <div class="value" style="font-weight:700;font-size:16px;">¥180,000</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  
+  
+  <div class="panel customer-card "
+       data-stage="cooperating"
+       data-warning="false"
+       data-search="广州恒通服装贸易有限公司 李经理 纺织品/服装 空派快件,卡航"
+       data-cid="5">
+
+    <!-- 卡片顶部 -->
+    <div class="panel-header" onclick="location.href='/customer/5'" style="cursor:pointer;">
+      <div class="card-top">
+        <div class="card-info">
+          <span class="card-name">广州恒通服装贸易有限公司</span>
+          <div class="card-tags">
+            <span class="badge badge-yellow">C级</span>
+            
+            
+            <!-- V2 stage label -->
+            <span style="font-size:10px;color:var(--text-secondary);background:#f1f5f9;padding:2px 8px;border-radius:10px;">合作中</span>
+            
+            <span style="font-size:11px;color:var(--primary-light);" title="跟进人">👤 张晓明</span>
+            
+          </div>
+        </div>
+        <div style="flex-shrink:0;display:flex;gap:6px;align-items:center;">
+          <button class="status-dropdown-btn receding"
+                  onclick="event.stopPropagation();showStatusPicker(5, 'receding')">
+            减量/休眠 ▾
+          </button>
+          <button class="btn btn-outline btn-sm" style="font-size:11px;padding:4px 10px;"
+                  onclick="event.stopPropagation();showQuickFollowUp(5, '广州恒通服装贸易有限公司')">
+            + 跟进
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 卡片中部: 业务信息 + 数据看板 -->
+    <div class="panel-body" style="padding:12px 20px 16px;">
+      <div class="card-body">
+        <!-- 业务信息 -->
+        <div class="card-section">
+          <div class="label">主营品类</div>
+          <div class="value">纺织品/服装</div>
+        </div>
+        <div class="card-section">
+          <div class="label">发货频率</div>
+          <div class="value">weekly</div>
+        </div>
+        <div class="card-section">
+          <div class="label">常走路线</div>
+          <div class="value" style="font-size:12px;">空派快件,卡航</div>
+        </div>
+
+        <!-- 数据看板: 月均货量(MoM) + 月均营收 -->
+        <div class="card-section" style="position:relative;">
+          <div class="label">月均货量</div>
+          <div class="value metric-value" onclick="event.stopPropagation();openVolumeTrend(5, '广州恒通服装贸易有限公司')" title="点击查看近6个月货量走势">
+            <span style="">
+              18.0方
+            </span>
+            
+            <span class="trend-arrow trend-up">▲100%</span>
+            
+          </div>
+        </div>
+        <div class="card-section">
+          <div class="label">月均营收</div>
+          <div class="value" style="font-weight:700;font-size:16px;">¥95,000</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  
+  
+  <div class="panel customer-card "
+       data-stage="developing"
+       data-warning="false"
+       data-search="厦门拓海家居用品有限公司 高经理 家居收纳/家具配件 海派欧洲,中欧班列"
+       data-cid="9">
+
+    <!-- 卡片顶部 -->
+    <div class="panel-header" onclick="location.href='/customer/9'" style="cursor:pointer;">
+      <div class="card-top">
+        <div class="card-info">
+          <span class="card-name">厦门拓海家居用品有限公司</span>
+          <div class="card-tags">
+            <span class="badge badge-yellow">C级</span>
+            
+            
+            <!-- V2 stage label -->
+            <span style="font-size:10px;color:var(--text-secondary);background:#f1f5f9;padding:2px 8px;border-radius:10px;">开发中</span>
+            
+            <span style="font-size:11px;color:var(--primary-light);" title="跟进人">👤 王芳</span>
+            
+          </div>
+        </div>
+        <div style="flex-shrink:0;display:flex;gap:6px;align-items:center;">
+          <button class="status-dropdown-btn contacted"
+                  onclick="event.stopPropagation();showStatusPicker(9, 'contacted')">
+            跟进中 ▾
+          </button>
+          <button class="btn btn-outline btn-sm" style="font-size:11px;padding:4px 10px;"
+                  onclick="event.stopPropagation();showQuickFollowUp(9, '厦门拓海家居用品有限公司')">
+            + 跟进
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 卡片中部: 业务信息 + 数据看板 -->
+    <div class="panel-body" style="padding:12px 20px 16px;">
+      <div class="card-body">
+        <!-- 业务信息 -->
+        <div class="card-section">
+          <div class="label">主营品类</div>
+          <div class="value">家居收纳/家具配件</div>
+        </div>
+        <div class="card-section">
+          <div class="label">发货频率</div>
+          <div class="value">seasonal</div>
+        </div>
+        <div class="card-section">
+          <div class="label">常走路线</div>
+          <div class="value" style="font-size:12px;">海派欧洲,中欧班列</div>
+        </div>
+
+        <!-- 数据看板: 月均货量(MoM) + 月均营收 -->
+        <div class="card-section" style="position:relative;">
+          <div class="label">月均货量</div>
+          <div class="value metric-value" onclick="event.stopPropagation();openVolumeTrend(9, '厦门拓海家居用品有限公司')" title="点击查看近6个月货量走势">
+            <span style="">
+              14.5方
+            </span>
+            
+            <span class="trend-arrow trend-flat">→</span>
+            
+          </div>
+        </div>
+        <div class="card-section">
+          <div class="label">月均营收</div>
+          <div class="value" style="font-weight:700;font-size:16px;">¥76,000</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  
+  
+  <div class="panel customer-card "
+       data-stage="developing"
+       data-warning="false"
+       data-search="深圳星链跨境电商有限公司 林小姐 TikTok Shop 小包/轻小件 美国小包专线,美西空派"
+       data-cid="8">
+
+    <!-- 卡片顶部 -->
+    <div class="panel-header" onclick="location.href='/customer/8'" style="cursor:pointer;">
+      <div class="card-top">
+        <div class="card-info">
+          <span class="card-name">深圳星链跨境电商有限公司</span>
+          <div class="card-tags">
+            <span class="badge badge-yellow">C级</span>
+            
+            
+            <!-- V2 stage label -->
+            <span style="font-size:10px;color:var(--text-secondary);background:#f1f5f9;padding:2px 8px;border-radius:10px;">开发中</span>
+            
+            <span style="font-size:11px;color:var(--primary-light);" title="跟进人">👤 张晓明</span>
+            
+          </div>
+        </div>
+        <div style="flex-shrink:0;display:flex;gap:6px;align-items:center;">
+          <button class="status-dropdown-btn new"
+                  onclick="event.stopPropagation();showStatusPicker(8, 'new')">
+            待处理 ▾
+          </button>
+          <button class="btn btn-outline btn-sm" style="font-size:11px;padding:4px 10px;"
+                  onclick="event.stopPropagation();showQuickFollowUp(8, '深圳星链跨境电商有限公司')">
+            + 跟进
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 卡片中部: 业务信息 + 数据看板 -->
+    <div class="panel-body" style="padding:12px 20px 16px;">
+      <div class="card-body">
+        <!-- 业务信息 -->
+        <div class="card-section">
+          <div class="label">主营品类</div>
+          <div class="value">TikTok Shop 小包/轻小件</div>
+        </div>
+        <div class="card-section">
+          <div class="label">发货频率</div>
+          <div class="value">weekly</div>
+        </div>
+        <div class="card-section">
+          <div class="label">常走路线</div>
+          <div class="value" style="font-size:12px;">美国小包专线,美西空派</div>
+        </div>
+
+        <!-- 数据看板: 月均货量(MoM) + 月均营收 -->
+        <div class="card-section" style="position:relative;">
+          <div class="label">月均货量</div>
+          <div class="value metric-value" onclick="event.stopPropagation();openVolumeTrend(8, '深圳星链跨境电商有限公司')" title="点击查看近6个月货量走势">
+            <span style="">
+              8.0方
+            </span>
+            
+            <span class="trend-arrow trend-flat">→</span>
+            
+          </div>
+        </div>
+        <div class="card-section">
+          <div class="label">月均营收</div>
+          <div class="value" style="font-weight:700;font-size:16px;">¥42,000</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  
+  
+  <div class="panel customer-card "
+       data-stage="quoted"
+       data-warning="false"
+       data-search="杭州锐思科技有限公司 赵总 电子产品 空派快件"
+       data-cid="6">
+
+    <!-- 卡片顶部 -->
+    <div class="panel-header" onclick="location.href='/customer/6'" style="cursor:pointer;">
+      <div class="card-top">
+        <div class="card-info">
+          <span class="card-name">杭州锐思科技有限公司</span>
+          <div class="card-tags">
+            <span class="badge badge-yellow">C级</span>
+            
+            
+            <!-- V2 stage label -->
+            <span style="font-size:10px;color:var(--text-secondary);background:#f1f5f9;padding:2px 8px;border-radius:10px;">已报价</span>
+            
+            <span style="font-size:11px;color:var(--primary-light);" title="跟进人">👤 李强</span>
+            
+          </div>
+        </div>
+        <div style="flex-shrink:0;display:flex;gap:6px;align-items:center;">
+          <button class="status-dropdown-btn nurturing"
+                  onclick="event.stopPropagation();showStatusPicker(6, 'nurturing')">
+            意向客户 ▾
+          </button>
+          <button class="btn btn-outline btn-sm" style="font-size:11px;padding:4px 10px;"
+                  onclick="event.stopPropagation();showQuickFollowUp(6, '杭州锐思科技有限公司')">
+            + 跟进
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 卡片中部: 业务信息 + 数据看板 -->
+    <div class="panel-body" style="padding:12px 20px 16px;">
+      <div class="card-body">
+        <!-- 业务信息 -->
+        <div class="card-section">
+          <div class="label">主营品类</div>
+          <div class="value">电子产品</div>
+        </div>
+        <div class="card-section">
+          <div class="label">发货频率</div>
+          <div class="value">monthly</div>
+        </div>
+        <div class="card-section">
+          <div class="label">常走路线</div>
+          <div class="value" style="font-size:12px;">空派快件</div>
+        </div>
+
+        <!-- 数据看板: 月均货量(MoM) + 月均营收 -->
+        <div class="card-section" style="position:relative;">
+          <div class="label">月均货量</div>
+          <div class="value metric-value" onclick="event.stopPropagation();openVolumeTrend(6, '杭州锐思科技有限公司')" title="点击查看近6个月货量走势">
+            <span style="">
+              5.0方
+            </span>
+            
+            <span class="trend-arrow trend-flat">→</span>
+            
+          </div>
+        </div>
+        <div class="card-section">
+          <div class="label">月均营收</div>
+          <div class="value" style="font-weight:700;font-size:16px;">¥28,000</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  
+  
+  <div class="panel customer-card "
+       data-stage="churned"
+       data-warning="false"
+       data-search="东莞联达塑胶制品有限公司 孙经理 塑胶制品/普货 卡航-欧洲"
+       data-cid="7">
+
+    <!-- 卡片顶部 -->
+    <div class="panel-header" onclick="location.href='/customer/7'" style="cursor:pointer;">
+      <div class="card-top">
+        <div class="card-info">
+          <span class="card-name">东莞联达塑胶制品有限公司</span>
+          <div class="card-tags">
+            <span class="badge badge-gray">D级</span>
+            
+            
+            <!-- V2 stage label -->
+            <span style="font-size:10px;color:var(--text-secondary);background:#f1f5f9;padding:2px 8px;border-radius:10px;">已流失</span>
+            
+          </div>
+        </div>
+        <div style="flex-shrink:0;display:flex;gap:6px;align-items:center;">
+          <button class="status-dropdown-btn churned"
+                  onclick="event.stopPropagation();showStatusPicker(7, 'churned')">
+            已流失 ▾
+          </button>
+          <button class="btn btn-outline btn-sm" style="font-size:11px;padding:4px 10px;"
+                  onclick="event.stopPropagation();showQuickFollowUp(7, '东莞联达塑胶制品有限公司')">
+            + 跟进
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 卡片中部: 业务信息 + 数据看板 -->
+    <div class="panel-body" style="padding:12px 20px 16px;">
+      <div class="card-body">
+        <!-- 业务信息 -->
+        <div class="card-section">
+          <div class="label">主营品类</div>
+          <div class="value">塑胶制品/普货</div>
+        </div>
+        <div class="card-section">
+          <div class="label">发货频率</div>
+          <div class="value">monthly</div>
+        </div>
+        <div class="card-section">
+          <div class="label">常走路线</div>
+          <div class="value" style="font-size:12px;">卡航-欧洲</div>
+        </div>
+
+        <!-- 数据看板: 月均货量(MoM) + 月均营收 -->
+        <div class="card-section" style="position:relative;">
+          <div class="label">月均货量</div>
+          <div class="value metric-value" onclick="event.stopPropagation();openVolumeTrend(7, '东莞联达塑胶制品有限公司')" title="点击查看近6个月货量走势">
+            <span style="">
+              0.0方
+            </span>
+            
+            <span class="trend-arrow trend-flat">→</span>
+            
+          </div>
+        </div>
+        <div class="card-section">
+          <div class="label">月均营收</div>
+          <div class="value" style="font-weight:700;font-size:16px;">¥0</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  
+  
+  <div class="panel customer-card "
+       data-stage="churned"
+       data-warning="false"
+       data-search="佛山海迅贸易黑名单样例 郑某 敏感品/资质不完整 南美海运"
+       data-cid="10">
+
+    <!-- 卡片顶部 -->
+    <div class="panel-header" onclick="location.href='/customer/10'" style="cursor:pointer;">
+      <div class="card-top">
+        <div class="card-info">
+          <span class="card-name">佛山海迅贸易黑名单样例</span>
+          <div class="card-tags">
+            <span class="badge badge-gray">D级</span>
+            
+            
+            <!-- V2 stage label -->
+            <span style="font-size:10px;color:var(--text-secondary);background:#f1f5f9;padding:2px 8px;border-radius:10px;">已流失</span>
+            
+          </div>
+        </div>
+        <div style="flex-shrink:0;display:flex;gap:6px;align-items:center;">
+          <button class="status-dropdown-btn disqualified"
+                  onclick="event.stopPropagation();showStatusPicker(10, 'disqualified')">
+            无效/关闭 ▾
+          </button>
+          <button class="btn btn-outline btn-sm" style="font-size:11px;padding:4px 10px;"
+                  onclick="event.stopPropagation();showQuickFollowUp(10, '佛山海迅贸易黑名单样例')">
+            + 跟进
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 卡片中部: 业务信息 + 数据看板 -->
+    <div class="panel-body" style="padding:12px 20px 16px;">
+      <div class="card-body">
+        <!-- 业务信息 -->
+        <div class="card-section">
+          <div class="label">主营品类</div>
+          <div class="value">敏感品/资质不完整</div>
+        </div>
+        <div class="card-section">
+          <div class="label">发货频率</div>
+          <div class="value">inactive</div>
+        </div>
+        <div class="card-section">
+          <div class="label">常走路线</div>
+          <div class="value" style="font-size:12px;">南美海运</div>
+        </div>
+
+        <!-- 数据看板: 月均货量(MoM) + 月均营收 -->
+        <div class="card-section" style="position:relative;">
+          <div class="label">月均货量</div>
+          <div class="value metric-value" onclick="event.stopPropagation();openVolumeTrend(10, '佛山海迅贸易黑名单样例')" title="点击查看近6个月货量走势">
+            <span style="">
+              0.0方
+            </span>
+            
+            <span class="trend-arrow trend-flat">→</span>
+            
+          </div>
+        </div>
+        <div class="card-section">
+          <div class="label">月均营收</div>
+          <div class="value" style="font-weight:700;font-size:16px;">¥0</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  
+  
+</div>
+
+<script>
+// ═══════════════════════════════════════════
+// PRD V2: 4阶段+预警 Tab过滤
+// ═══════════════════════════════════════════
+var currentStage = 'all';
+
+function setStageFilter(stage, btn) {
+  currentStage = stage;
+  document.querySelectorAll('#statusTabs button').forEach(function(b) { b.classList.remove('active'); });
+  btn.classList.add('active');
+  applyFilters();
+}
+
+function applyFilters() {
+  var keyword = document.getElementById('searchInput').value.toLowerCase();
+  var cards = document.querySelectorAll('.customer-card');
+  cards.forEach(function(card) {
+    var matchSearch = card.dataset.search.toLowerCase().indexOf(keyword) >= 0;
+    var matchStage;
+    if (currentStage === 'all') {
+      matchStage = true;
+    } else if (currentStage === 'warning') {
+      matchStage = card.dataset.warning === 'true';
+    } else {
+      matchStage = card.dataset.stage === currentStage;
+    }
+    card.style.display = (matchSearch && matchStage) ? '' : 'none';
+  });
+}
+
+// ═══════════════════════════════════════════
+// 6个月货量走势 (PRD V2 §5: 数据穿透)
+// ═══════════════════════════════════════════
+async function openVolumeTrend(cid, companyName) {
+  var r = await apiGet('/api/customers/' + cid + '/trend');
+  if (!r.ok) { showToast('加载失败', 'error'); return; }
+
+  var trend = r.trend;
+  var maxVol = Math.max.apply(null, trend.map(function(t){ return t.volume; })) || 1;
+
+  var html = '<h3>📈 ' + companyName + ' - 近6个月货量走势</h3>';
+  html += '<div style="margin-top:12px;">';
+  html += '<div class="trend-bars">';
+  trend.forEach(function(t, i) {
+    var h = Math.max(6, (t.volume / maxVol * 80));
+    var color = t.volume > 0 ? '#3b82f6' : '#e2e8f0';
+    // highlight current month
+    if (i === trend.length - 1) color = '#1d4ed8';
+    html += '<div style="flex:1;text-align:center;">'
+      + '<div style="font-size:10px;color:var(--text);font-weight:500;">' + (t.volume > 0 ? t.volume.toFixed(0) : '0') + '</div>'
+      + '<div style="height:' + h + 'px;background:' + color + ';border-radius:3px 3px 0 0;margin:0 auto;width:70%;min-width:24px;"></div>'
+      + '<div style="font-size:10px;color:var(--text-secondary);margin-top:4px;">' + t.label + '</div>'
+      + '</div>';
+  });
+  html += '</div>';
+  // Summary line
+  html += '<div style="display:flex;justify-content:space-between;margin-top:12px;font-size:12px;color:var(--text-secondary);">';
+  html += '<span>总计: <strong>' + trend.reduce(function(s,t){return s+t.volume;},0).toFixed(1) + ' kg</strong></span>';
+  html += '<span>月均: <strong>' + (trend.reduce(function(s,t){return s+t.volume;},0)/trend.length).toFixed(1) + ' kg</strong></span>';
+  html += '</div></div>';
+  html += '<div class="modal-actions"><button class="btn btn-outline" onclick="closeModal()">关闭</button></div>';
+
+  openModal(html);
+}
+
+// ═══════════════════════════════════════════
+// 运单钻取弹窗
+// ═══════════════════════════════════════════
+async function openOrderDrill(cid, companyName) {
+  openModal('<div style="text-align:center;padding:40px;">加载中...</div>');
+  var r = await apiGet('/api/customers/' + cid + '/orders');
+  if (!r.ok) { showToast('加载失败', 'error'); closeModal(); return; }
+
+  var html = '<h3>📦 ' + companyName + ' - 最近运单</h3>';
+  if (r.orders.length === 0) {
+    html += '<p style="text-align:center;padding:30px;color:var(--text-secondary);">暂无运单记录</p>';
+  } else {
+    html += '<div style="max-height:400px;overflow-y:auto;"><table class="order-drill-table"><thead><tr>'
+      + '<th>运单号</th><th>路线</th><th>货品</th><th>重量</th><th>起运日</th><th>状态</th></tr></thead><tbody>';
+    r.orders.forEach(function(o) {
+      var statusColors = {delivered:'badge-green',arrived:'badge-green',transit:'badge-blue',departed:'badge-blue',
+        customs:'badge-yellow',received:'badge-purple',warehouse:'badge-gray'};
+      var sc = statusColors[o.status] || 'badge-gray';
+      html += '<tr>'
+        + '<td style="font-family:monospace;">' + (o.tracking_number || '-') + '</td>'
+        + '<td>' + (o.route_detail || '-') + '</td>'
+        + '<td>' + (o.cargo_desc || '-') + '</td>'
+        + '<td>' + (o.weight_kg || 0) + 'kg</td>'
+        + '<td>' + (o.etd || '-') + '</td>'
+        + '<td><span class="badge ' + sc + '">' + o.status + '</span></td>'
+        + '</tr>';
+    });
+    html += '</tbody></table></div>';
+  }
+  html += '<div class="modal-actions"><button class="btn btn-outline" onclick="closeModal()">关闭</button></div>';
+  document.getElementById('modalContent').innerHTML = html;
+}
+
+// ═══════════════════════════════════════════
+// PRD V2: 4阶段状态流转
+// ═══════════════════════════════════════════
+var allStages = ["developing", "quoted", "cooperating", "churned"];
+var stageLabels = {"churned": "\u5df2\u6d41\u5931", "cooperating": "\u5408\u4f5c\u4e2d", "developing": "\u5f00\u53d1\u4e2d", "quoted": "\u5df2\u62a5\u4ef7"};
+var stageToDefault = {"churned": "disqualified", "cooperating": "active", "developing": "contacted", "quoted": "quoted"};
+
+function showStatusPicker(cid, currentStatus) {
+  var html = '<h3>编辑客户状态 (PRD V2)</h3>';
+  html += '<p style="margin-bottom:4px;font-size:13px;color:var(--text-secondary);">选择目标阶段，系统自动映射为底层状态</p>';
+  html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px;">';
+  for (var i = 0; i < allStages.length; i++) {
+    var s = allStages[i];
+    var label = stageLabels[s] || s;
+    var activeClass = ({"active": "cooperating", "churned": "churned", "contacted": "developing", "disqualified": "churned", "negotiating": "quoted", "new": "developing", "nurturing": "quoted", "quoted": "quoted", "receding": "cooperating", "trial": "cooperating"}[currentStatus] || '') === s ? 'btn-primary' : 'btn-outline';
+    html += '<button class="btn ' + activeClass + '" style="padding:12px;font-size:14px;"';
+    html += ' onclick="pickStage(' + cid + ', \'' + s + '\')">' + label + '</button>';
+  }
+  html += '</div>';
+  openModal(html);
+}
+
+function pickStage(cid, stage) {
+  closeModal();
+  // 4阶段无需必填项校验，直接流转
+  var params = new URLSearchParams();
+  params.set('to_status', stage);
+  params.set('operator', '张晓明');
+  apiPost('/api/customer/' + cid + '/transition?' + params.toString()).then(function(r) {
+    if (r.ok) { showToast(r.msg); setTimeout(function() { location.reload(); }, 800); }
+    else showToast(r.msg, 'error');
+  });
+}
+
+// ═══════════════════════════════════════════
+// 快速跟进记录
+// ═══════════════════════════════════════════
+function showQuickFollowUp(cid, companyName) {
+  var html = '<h3>📝 跟进记录 - ' + companyName + '</h3>';
+  html += '<select id="fuActType" style="width:100%;margin-bottom:8px;padding:8px;border:1px solid var(--border);border-radius:6px;">'
+    + '<option value="call">📞 电话</option>'
+    + '<option value="meeting">🤝 会议</option>'
+    + '<option value="email">📧 邮件</option>'
+    + '<option value="visit">🏢 拜访</option>'
+    + '</select>';
+  html += '<textarea id="fuContent" rows="4" placeholder="跟进内容描述..." style="width:100%;margin-bottom:12px;padding:8px;border:1px solid var(--border);border-radius:6px;resize:vertical;"></textarea>';
+  html += '<div style="margin-bottom:12px;">'
+    + '<label style="font-size:13px;display:block;margin-bottom:4px;">图片附件（可选）:</label>'
+    + '<input type="file" id="fuImages" multiple accept="image/*" style="font-size:13px;" onchange="previewCustFollowImages(this)">'
+    + '<div id="fuImagePreview" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;"></div>'
+    + '<input type="hidden" id="fuImageUrls" value="">'
+    + '</div>';
+  html += '<div class="modal-actions">'
+    + '<button class="btn btn-outline" onclick="closeModal()">取消</button>'
+    + '<button class="btn btn-primary" onclick="doQuickFollowUp(' + cid + ')">保存跟进</button>'
+    + '</div>';
+  openModal(html);
+}
+
+async function previewCustFollowImages(input) {
+  var preview = document.getElementById('fuImagePreview');
+  var urlsField = document.getElementById('fuImageUrls');
+  preview.innerHTML = '';
+  var urls = [];
+  for (var i = 0; i < input.files.length; i++) {
+    var file = input.files[i];
+    var formData = new FormData();
+    formData.append('file', file);
+    try {
+      var r = await fetch('/api/upload/follow-up-image', { method: 'POST', body: formData }).then(function(res){return res.json();});
+      if (r.ok) {
+        urls.push(r.url);
+        var img = document.createElement('img');
+        img.src = r.url;
+        img.style.cssText = 'width:72px;height:72px;border-radius:6px;object-fit:cover;';
+        preview.appendChild(img);
+      }
+    } catch(e) {}
+  }
+  urlsField.value = JSON.stringify(urls);
+}
+
+async function doQuickFollowUp(cid) {
+  var content = document.getElementById('fuContent').value.trim();
+  if (!content) return showToast('请输入跟进内容', 'error');
+  var actType = document.getElementById('fuActType').value;
+  var imageUrls = document.getElementById('fuImageUrls').value || '';
+  var params = new URLSearchParams();
+  params.set('activity_type', actType);
+  params.set('content', content);
+  params.set('image_urls', imageUrls);
+  params.set('created_by', '张晓明');
+  var r = await fetch('/api/customer/' + cid + '/add-activity?' + params.toString(), {method:'POST'}).then(function(res){return res.json();});
+  if (r.ok) {
+    showToast('跟进记录已保存');
+    closeModal();
+  } else {
+    showToast(r.msg, 'error');
+  }
+}
+
+</script>
+
+  </main>
+</div>
+
+<!-- Modal -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal" id="modalContent"></div>
+</div>
+
+<script>
+// ── Modal utils ──
+function openModal(html) {
+  document.getElementById('modalContent').innerHTML = html;
+  document.getElementById('modalOverlay').classList.add('show');
+}
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('show');
+}
+document.getElementById('modalOverlay').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+
+// ── Toast ──
+function showToast(msg, type='success') {
+  let el = document.createElement('div');
+  el.style.cssText = `position:fixed;top:20px;right:20px;z-index:999;padding:12px 20px;
+    border-radius:8px;color:#fff;font-size:14px;animation:fadeIn .3s;
+    background:${type==='error'?'#ef4444':'#10b981'}`;
+  el.textContent = msg;
+  document.body.appendChild(el);
+  setTimeout(() => { el.style.opacity='0'; el.style.transition='opacity .3s'; setTimeout(() => el.remove(), 300); }, 2500);
+}
+
+// ── API helpers ──
+async function apiGet(url) {
+  let r = await fetch(url);
+  return r.json();
+}
+async function apiPost(url) {
+  let r = await fetch(url, {method:'POST'});
+  return r.json();
+}
+</script>
+
+</body>
+</html>
