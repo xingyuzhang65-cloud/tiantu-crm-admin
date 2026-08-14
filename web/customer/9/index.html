@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>跨境物流CRM - ShareAI</title>
+<link rel="stylesheet" href="/tiantu-crm-admin/web/static/css/style.css">
+<script src="/tiantu-crm-admin/web/static/admin-pages.js"></script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <h2>🚢 跨境物流CRM</h2>
+      <div class="sub">Powered by ShareAI 智能引擎</div>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="/" class="">
+        <span class="icon">📊</span> 经营仪表盘
+      </a>
+      <a href="/leads" class="">
+        <span class="icon">🎯</span> 线索公海池
+      </a>
+      <a href="/customers" class="active">
+        <span class="icon">👥</span> 客户管理与商机
+      </a>
+      <a href="/quotation" class="">
+        <span class="icon">💰</span> 报价管理
+      </a>
+      <a href="/tracking" class="">
+        <span class="icon">📍</span> 轨迹与客服
+      </a>
+      <a href="/risk" class="">
+        <span class="icon">🛡️</span> 风控授信
+      </a>
+      <a href="/analytics" class="">
+        <span class="icon">📈</span> 经营分析
+      </a>
+      <a href="/moments" class="">
+        <span class="icon">📱</span> 团队广场
+        <span class="sidebar-badge">NEW</span>
+      </a>
+      <a href="/ai-assistant" class="">
+        <span class="icon">🤖</span> AI智能助手
+        <span class="sidebar-badge">AI</span>
+      </a>
+    </nav>
+    <div style="position:absolute;bottom:20px;left:20px;right:20px;font-size:11px;color:rgba(255,255,255,.4);">
+      结合纷享销客 ShareAI · 天图架构
+    </div>
+  </aside>
+  <main class="main">
+    
+<style>
+.metrics-grid { display:grid; grid-template-columns:repeat(2, 1fr); gap:12px; }
+.metric-mini { text-align:center; padding:12px; border-radius:8px; background:#f8fafc; }
+.metric-mini .m-value { font-size:20px; font-weight:700; }
+.metric-mini .m-label { font-size:11px; color:var(--text-secondary); margin-top:2px; }
+.lead-trace { display:inline-flex; align-items:center; gap:8px; padding:6px 12px; background:#f0f7ff; border-radius:6px; font-size:13px; }
+.warning-banner { background:#fef2f2; border:1px solid #fecaca; border-radius:8px; padding:12px 16px; margin-bottom:16px; display:flex; align-items:center; gap:10px; }
+.warning-banner .warn-icon { font-size:24px; }
+.warning-banner .warn-text { flex:1; font-size:14px; color:#991b1b; }
+.warning-banner .warn-text strong { color:#dc2626; }
+.stage-badge { display:inline-block; padding:4px 12px; border-radius:14px; font-size:12px; font-weight:600; }
+.stage-badge.developing { background:#dbeafe; color:#1e40af; }
+.stage-badge.negotiating { background:#ede9fe; color:#5b21b6; }
+.stage-badge.cooperating { background:#d1fae5; color:#065f46; }
+.stage-badge.archived { background:#f1f5f9; color:#475569; }
+</style>
+
+<div class="flex-between mb-4">
+  <div>
+    <a href="/customers" style="color:var(--text-secondary);font-size:13px;">← 返回客户列表</a>
+    <h1 style="font-size:22px;margin-top:4px;">厦门拓海家居用品有限公司</h1>
+    <div style="display:flex;align-items:center;gap:8px;margin-top:4px;flex-wrap:wrap;">
+      <!-- V2 阶段标签 -->
+      <span class="stage-badge developing">开发中</span>
+      
+      <span style="font-size:12px;color:var(--primary-light);font-weight:500;">👤 跟进人: 王芳</span>
+      
+      
+    </div>
+  </div>
+  <div style="display:flex;gap:8px;">
+    <button class="btn btn-outline btn-sm" onclick="openVolumeTrend()" style="font-size:12px;">📈 6月货量走势</button>
+    <button class="btn btn-primary" onclick="getAIInsight(9)">🤖 AI客户洞察</button>
+  </div>
+</div>
+
+<!-- PRD V2: 预警横幅 -->
+
+
+<!-- 指标卡片行 -->
+<div class="metrics-grid" style="margin-bottom:16px;">
+  <div class="panel" style="margin:0;">
+    <div class="panel-body">
+      <div class="metric-mini">
+        <div class="m-value" style="">
+          -
+        </div>
+        <div class="m-label">货量环比 (MoM MTD)</div>
+        <div style="font-size:20px;margin-top:4px;">
+          ⚪
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel" style="margin:0;">
+    <div class="panel-body">
+      <div class="metric-mini">
+        <div class="m-value">0票</div>
+        <div class="m-label">近30天运单</div>
+        <div style="margin-top:4px;">
+          
+          <span style="display:inline-block;padding:2px 10px;border-radius:10px;font-size:11px;font-weight:600;
+            background:#f1f5f9;color:#64748b;">
+            Inactive
+          </span>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div style="display:flex;gap:16px;align-items:flex-start;">
+<!-- KYC 画像 -->
+<div class="panel" style="flex:1;min-width:0;">
+  <div class="panel-header">📋 客户画像 <span class="text-sm" style="font-weight:400;">ID: 9 · 跟进人: <strong>王芳</strong></span></div>
+  <div class="panel-body">
+    <div class="grid-3">
+      <div><span class="text-muted">联系人</span><br><strong>高经理</strong></div>
+      <div><span class="text-muted">电话</span><br>13800138009</div>
+      <div><span class="text-muted">邮箱</span><br>gao@tuohai-home.com</div>
+      <div><span class="text-muted">国家</span><br>中国</div>
+      <div><span class="text-muted">主营品类</span><br><strong>家居收纳/家具配件</strong></div>
+      <div><span class="text-muted">发货频率</span><br>seasonal</div>
+      <div><span class="text-muted">常用路线</span><br>海派欧洲,中欧班列</div>
+      <div><span class="text-muted">出口资质</span><br>一般贸易</div>
+      <div>
+        <span class="text-muted">月均货量/营收</span><br>
+        <strong>14.5方 / ¥76,000</strong>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 当前状态 + 预警状态 -->
+<div style="width:200px;flex-shrink:0;">
+  <div class="panel">
+    <div class="panel-header">🔄 客户状态</div>
+    <div class="panel-body" style="text-align:center;">
+      <div style="font-size:16px;font-weight:700;color:var(--primary-light);margin-bottom:6px;">跟进中</div>
+      <div class="text-sm" style="color:var(--text-secondary);margin-bottom:12px;">
+        2026-07-15 14:07
+      </div>
+      <button class="btn btn-primary btn-sm" onclick="showStatusPicker()">✏️ 编辑状态</button>
+      
+    </div>
+  </div>
+</div>
+</div>
+
+<div class="grid-2">
+  <!-- 商机列表 -->
+  <div class="panel">
+    <div class="panel-header">🎯 商机</div>
+    <div class="panel-body">
+      
+      
+      <div style="padding:8px 0;border-bottom:1px solid var(--border);">
+        <strong>欧洲家居海派旺季备货</strong>
+        <span class="badge badge-blue" style="margin-left:6px;">quoting</span>
+        <span style="float:right;font-weight:600;">¥160,000</span>
+        <br><span class="text-sm">赢率: 45% · 预计关闭: 2026-07-05</span>
+      </div>
+      
+      
+    </div>
+  </div>
+
+  <!-- 授信信息 -->
+  <div class="panel">
+    <div class="panel-header">🛡️ 授信概况</div>
+    <div class="panel-body">
+      
+      <div class="grid-2" style="margin-bottom:12px;">
+        <div><span class="text-muted">信用评分</span><br><strong style="color:var(--warning)">590</strong></div>
+        <div><span class="text-muted">授信额度</span><br><strong>¥120,000</strong></div>
+        <div><span class="text-muted">当前欠款</span><br><strong style="color:">¥15,000</strong></div>
+        <div><span class="text-muted">账龄/账期</span><br>12天 / NET15</div>
+      </div>
+      <p class="text-sm">保护期即将到期，需补齐企业资料</p>
+      
+    </div>
+  </div>
+</div>
+
+<div class="grid-2">
+  <!-- 报价单 -->
+  <div class="panel">
+    <div class="panel-header">💰 报价记录</div>
+    <div class="panel-body" style="max-height:240px;overflow-y:auto;">
+      <p class="text-muted">暂无报价</p>
+    </div>
+  </div>
+
+  <!-- 最近运单 -->
+  <div class="panel">
+    <div class="panel-header">📦 最近运单</div>
+    <div class="panel-body" style="max-height:240px;overflow-y:auto;">
+      <p class="text-muted">暂无运单</p>
+    </div>
+  </div>
+</div>
+
+<!-- 跟进记录 -->
+<div class="panel mt-4">
+  <div class="panel-header" style="display:flex;justify-content:space-between;align-items:center;">
+    <span>📝 跟进记录与状态变更日志</span>
+    <button class="btn btn-primary btn-sm" onclick="showFollowUpForm()">+ 添加跟进</button>
+  </div>
+  <div id="followUpFormArea"></div>
+  <div class="panel-body" style="max-height:400px;overflow-y:auto;">
+    
+    
+    <div style="padding:8px 0;border-bottom:1px solid var(--border);">
+      <div class="flex-between">
+        <div>
+          
+          <span class="badge badge-blue">📞 电话</span>
+          
+        </div>
+        <span class="text-sm">2026-07-17 14:07</span>
+      </div>
+      <div style="font-size:13px;margin-top:4px;">客户要求欧洲海派报价，但最近27天未继续跟进，保护期剩余约3天</div>
+      
+      <div class="text-sm">操作人: 王芳</div>
+    </div>
+    
+    <div style="padding:8px 0;border-bottom:1px solid var(--border);">
+      <div class="flex-between">
+        <div>
+          
+          <span class="badge badge-purple">🔄 状态流转</span>
+          
+        </div>
+        <span class="text-sm">2026-07-15 14:07</span>
+      </div>
+      <div style="font-size:13px;margin-top:4px;">客户已完成初访，进入保护期倒计时</div>
+      
+      <div class="text-sm">操作人: 王芳</div>
+    </div>
+    
+    
+  </div>
+</div>
+
+<script>
+var custId = 9;
+var warningThreshold = 20;
+
+// ── 6个月货量走势 (PRD V2) ──
+async function openVolumeTrend() {
+  var r = await apiGet('/api/customers/' + custId + '/trend');
+  if (!r.ok) { showToast('加载失败', 'error'); return; }
+
+  var trend = r.trend;
+  var maxVol = Math.max.apply(null, trend.map(function(t){ return t.volume; })) || 1;
+
+  var html = '<h3>📈 厦门拓海家居用品有限公司 - 近6个月货量走势</h3>';
+  html += '<div style="margin-top:12px;">';
+  html += '<div style="display:flex;align-items:flex-end;gap:6px;height:100px;">';
+  trend.forEach(function(t, i) {
+    var h = Math.max(6, (t.volume / maxVol * 90));
+    var color = i === trend.length - 1 ? '#1d4ed8' : '#3b82f6';
+    html += '<div style="flex:1;text-align:center;">'
+      + '<div style="font-size:11px;color:var(--text);">' + (t.volume > 0 ? t.volume.toFixed(0) : '-') + '</div>'
+      + '<div style="height:' + h + 'px;background:' + color + ';border-radius:3px 3px 0 0;margin:0 auto;width:60%;min-width:24px;"></div>'
+      + '<div style="font-size:10px;color:var(--text-secondary);margin-top:4px;">' + t.label + '</div>'
+      + '</div>';
+  });
+  html += '</div>';
+
+  var totalVol = trend.reduce(function(s,t){return s+t.volume;},0);
+  var avgVol = totalVol / trend.length;
+  html += '<div style="display:flex;justify-content:space-between;margin-top:12px;font-size:12px;color:var(--text-secondary);">';
+  html += '<span>6个月总计: <strong>' + totalVol.toFixed(1) + ' kg</strong></span>';
+  html += '<span>月均: <strong>' + avgVol.toFixed(1) + ' kg</strong></span>';
+  html += '</div></div>';
+  html += '<div class="modal-actions"><button class="btn btn-outline" onclick="closeModal()">关闭</button></div>';
+
+  openModal(html);
+}
+
+function openLeadDetail(leadId) {
+  openModal('<div style="text-align:center;padding:40px;">加载中...</div>');
+  fetch('/api/leads/' + leadId).then(r=>r.json()).then(function(r) {
+    if (!r.ok) { showToast('线索不存在', 'error'); closeModal(); return; }
+    var l = r.lead;
+    var html = '<h3>🔗 线索溯源</h3>';
+    html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:13px;">';
+    html += '<div><span style="color:var(--text-secondary);">公司名称</span><br><strong>' + l.company_name + '</strong></div>';
+    html += '<div><span style="color:var(--text-secondary);">状态</span><br>' + l.lead_status_label + '</div>';
+    html += '<div><span style="color:var(--text-secondary);">联系人</span><br>' + (l.contact_name || '-') + '</div>';
+    html += '<div><span style="color:var(--text-secondary);">手机号</span><br>' + l.contact_mobile + '</div>';
+    html += '<div><span style="color:var(--text-secondary);">物流偏好</span><br>' + (l.logistics_type || '-') + '</div>';
+    html += '<div><span style="color:var(--text-secondary);">目标市场</span><br>' + (l.target_market || '-') + '</div>';
+    html += '<div><span style="color:var(--text-secondary);">归属</span><br>' + (l.owner || '无') + '</div>';
+    html += '<div><span style="color:var(--text-secondary);">来源</span><br>' + (l.source || '-') + '</div>';
+    html += '</div>';
+    html += '<div class="modal-actions"><button class="btn btn-outline" onclick="closeModal()">关闭</button></div>';
+    openModal(html);
+  });
+}
+
+// ── PRD V2: 4阶段状态流转 ──
+var allStages = ["developing", "quoted", "cooperating", "churned"];
+var stageLabels = {"churned": "\u5df2\u6d41\u5931", "cooperating": "\u5408\u4f5c\u4e2d", "developing": "\u5f00\u53d1\u4e2d", "quoted": "\u5df2\u62a5\u4ef7"};
+var statusToStage = {"active": "cooperating", "churned": "churned", "contacted": "developing", "disqualified": "churned", "negotiating": "quoted", "new": "developing", "nurturing": "quoted", "quoted": "quoted", "receding": "cooperating", "trial": "cooperating"};
+
+function showStatusPicker() {
+  let currentStage = statusToStage['contacted'] || '';
+  let html = '<h3>编辑客户状态 (PRD V2)</h3>';
+  html += '<p style="margin-bottom:4px;font-size:13px;color:var(--text-secondary);">选择目标阶段，系统自动映射为底层状态</p>';
+  html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px;">';
+  for (let i = 0; i < allStages.length; i++) {
+    let s = allStages[i];
+    let label = stageLabels[s] || s;
+    let isCurrent = s === currentStage;
+    html += '<button class="btn ' + (isCurrent ? 'btn-primary' : 'btn-outline') + '" style="padding:12px;font-size:14px;"';
+    html += ' onclick="pickStage(\'' + s + '\')">' + label + '</button>';
+  }
+  html += '</div>';
+  openModal(html);
+}
+
+function pickStage(stage) {
+  closeModal();
+  let params = new URLSearchParams();
+  params.set('to_status', stage);
+  params.set('operator', '张晓明');
+  apiPost('/api/customer/' + custId + '/transition?' + params.toString()).then(function(r) {
+    if (r.ok) { showToast(r.msg); closeModal(); setTimeout(() => location.reload(), 800); }
+    else showToast(r.msg, 'error');
+  });
+}
+
+// ── 添加跟进记录 ──
+function showFollowUpForm() {
+  var area = document.getElementById('followUpFormArea');
+  area.innerHTML = '<div style="background:#f0f7ff;padding:16px;border-radius:8px;border:1px solid #bfdbfe;margin-bottom:12px;">'
+    + '<h4 style="font-size:14px;color:var(--primary-light);margin-bottom:12px;">新增跟进记录</h4>'
+    + '<select id="fuActType" style="width:100%;margin-bottom:8px;padding:8px;border:1px solid var(--border);border-radius:6px;">'
+    + '<option value="call">📞 电话</option>'
+    + '<option value="meeting">🤝 会议</option>'
+    + '<option value="email">📧 邮件</option>'
+    + '<option value="visit">🏢 拜访</option>'
+    + '</select>'
+    + '<textarea id="fuContent" rows="3" placeholder="跟进内容描述..." style="width:100%;margin-bottom:8px;padding:8px;border:1px solid var(--border);border-radius:6px;resize:vertical;"></textarea>'
+    + '<div style="margin-bottom:8px;">'
+    + '<label style="font-size:13px;display:block;margin-bottom:4px;">图片附件（可选）:</label>'
+    + '<input type="file" id="fuImages" multiple accept="image/*" style="font-size:13px;" onchange="previewCustFollowImages(this)">'
+    + '<div id="fuImagePreview" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;"></div>'
+    + '<input type="hidden" id="fuImageUrls" value="">'
+    + '</div>'
+    + '<div style="display:flex;gap:8px;">'
+    + '<button class="btn btn-primary btn-sm" onclick="doFollowUp()">保存跟进</button>'
+    + '<button class="btn btn-outline btn-sm" onclick="document.getElementById(\'followUpFormArea\').innerHTML=\'\'">取消</button>'
+    + '</div></div>';
+}
+
+async function previewCustFollowImages(input) {
+  var preview = document.getElementById('fuImagePreview');
+  var urlsField = document.getElementById('fuImageUrls');
+  preview.innerHTML = '';
+  var urls = [];
+  for (var i = 0; i < input.files.length; i++) {
+    var file = input.files[i];
+    var formData = new FormData();
+    formData.append('file', file);
+    try {
+      var r = await fetch('/api/upload/follow-up-image', { method: 'POST', body: formData }).then(function(res){return res.json();});
+      if (r.ok) {
+        urls.push(r.url);
+        var img = document.createElement('img');
+        img.src = r.url;
+        img.style.cssText = 'width:72px;height:72px;border-radius:6px;object-fit:cover;';
+        preview.appendChild(img);
+      }
+    } catch(e) {}
+  }
+  urlsField.value = JSON.stringify(urls);
+}
+
+async function doFollowUp() {
+  var content = document.getElementById('fuContent').value.trim();
+  if (!content) return showToast('请输入跟进内容', 'error');
+  var actType = document.getElementById('fuActType').value;
+  var imageUrls = document.getElementById('fuImageUrls').value || '';
+  var params = new URLSearchParams();
+  params.set('activity_type', actType);
+  params.set('content', content);
+  params.set('image_urls', imageUrls);
+  params.set('created_by', '王芳');
+  var r = await fetch('/api/customer/' + custId + '/add-activity?' + params.toString(), {method:'POST'}).then(function(res){return res.json();});
+  if (r.ok) {
+    showToast('跟进记录已保存');
+    document.getElementById('followUpFormArea').innerHTML = '';
+    setTimeout(function() { location.reload(); }, 800);
+  } else {
+    showToast(r.msg, 'error');
+  }
+}
+
+async function getAIInsight(id) {
+  let r = await apiGet('/api/ai/customer_insight?customer_id=' + id);
+  if (!r.ok) return showToast('AI分析失败', 'error');
+  let insightItems = r.insights.map(i => '<p style="font-size:13px;margin:4px 0;">• ' + i + '</p>').join('');
+  breakItems = '<table><tbody>';
+  for (let [k,v] of Object.entries(r.score_breakdown)) {
+    breakItems += '<tr><td>' + k + '</td><td><div class="progress-bar" style="width:150px;"><div class="progress-fill ' + (v>=70?'progress-green':v>=40?'progress-yellow':'progress-red') + '" style="width:' + v + '%;"></div></div></td><td style="font-size:12px;">' + v + '分</td></tr>';
+  }
+  breakItems += '</tbody></table>';
+  let html = '<h3>🤖 AI客户洞察 — ' + r.customer_name + '</h3>';
+  html += '<div style="color:' + r.risk_color + ';font-weight:600;margin-bottom:12px;">风险等级: ' + r.risk_level + '</div>';
+  html += '<div class="insight-card ' + (r.risk_level==='高'?'danger':'success') + '"><div class="title">综合诊断</div>' + insightItems + '</div>';
+  html += '<p class="mt-2"><strong>AI建议:</strong> ' + r.risk_action + '</p>';
+  html += '<div class="modal-actions"><button class="btn btn-outline" onclick="closeModal()">关闭</button></div>';
+  openModal(html);
+}
+
+function previewFullImage(url) {
+  var overlay = document.createElement('div');
+  overlay.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.95);z-index:10000;display:flex;justify-content:center;align-items:center;cursor:pointer;';
+  overlay.onclick = function() { document.body.removeChild(overlay); };
+  var img = document.createElement('img');
+  img.src = url;
+  img.style.cssText = 'max-width:95%;max-height:95%;object-fit:contain;';
+  var closeBtn = document.createElement('div');
+  closeBtn.textContent = '✕';
+  closeBtn.style.cssText = 'position:absolute;top:30px;right:30px;color:#fff;font-size:32px;cursor:pointer;';
+  overlay.appendChild(img);
+  overlay.appendChild(closeBtn);
+  document.body.appendChild(overlay);
+}
+</script>
+
+  </main>
+</div>
+
+<!-- Modal -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal" id="modalContent"></div>
+</div>
+
+<script>
+// ── Modal utils ──
+function openModal(html) {
+  document.getElementById('modalContent').innerHTML = html;
+  document.getElementById('modalOverlay').classList.add('show');
+}
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('show');
+}
+document.getElementById('modalOverlay').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+
+// ── Toast ──
+function showToast(msg, type='success') {
+  let el = document.createElement('div');
+  el.style.cssText = `position:fixed;top:20px;right:20px;z-index:999;padding:12px 20px;
+    border-radius:8px;color:#fff;font-size:14px;animation:fadeIn .3s;
+    background:${type==='error'?'#ef4444':'#10b981'}`;
+  el.textContent = msg;
+  document.body.appendChild(el);
+  setTimeout(() => { el.style.opacity='0'; el.style.transition='opacity .3s'; setTimeout(() => el.remove(), 300); }, 2500);
+}
+
+// ── API helpers ──
+async function apiGet(url) {
+  let r = await fetch(url);
+  return r.json();
+}
+async function apiPost(url) {
+  let r = await fetch(url, {method:'POST'});
+  return r.json();
+}
+</script>
+
+</body>
+</html>

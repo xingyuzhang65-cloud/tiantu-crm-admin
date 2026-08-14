@@ -288,7 +288,9 @@
     }
     if (/^\/api\/customer\/\d+\/transition$/.test(path) && method === 'POST') {
       const id = Number(path.split('/')[3]);
-      const target = url.searchParams.get('target') || url.searchParams.get('stage') || body.stage || 'contacted';
+      const requested = url.searchParams.get('to_status') || url.searchParams.get('target') || url.searchParams.get('stage') || body.stage || 'contacted';
+      const stageDefaults = { developing: 'contacted', quoted: 'quoted', cooperating: 'active', churned: 'churned' };
+      const target = stageDefaults[requested] || requested;
       customers = customers.map(item => Number(item.id) === id ? { ...item, lifecycle_status: target } : item);
       saveCustomers();
       return jsonResponse({ ok: true, msg: '客户阶段已更新' });
@@ -300,6 +302,20 @@
       customers = customers.map(item => Number(item.id) === id ? { ...item, latest_follow: { content: activity.content, created_by: activity.created_by }, last_followup_at: activity.created_at } : item);
       write('tiantu_admin_customer_activities', customerActivities); saveCustomers();
       return jsonResponse({ ok: true, msg: '跟进记录已保存' });
+    }
+    if (path === '/api/ai/customer_insight' && method === 'GET') {
+      const id = Number(url.searchParams.get('customer_id'));
+      const customer = customers.find(item => Number(item.id) === id);
+      if (!customer) return jsonResponse({ ok: false, msg: '客户不存在' }, 404);
+      const score = Number(customer.health_score || 70);
+      const riskLevel = score < 60 ? '高' : score < 80 ? '中' : '低';
+      const riskColor = score < 60 ? '#ef4444' : score < 80 ? '#f59e0b' : '#10b981';
+      const insights = [
+        '客户当前处于“' + (lifecycleLabels[customer.lifecycle_status] || customer.lifecycle_status) + '”阶段，健康评分为 ' + score + ' 分。',
+        '近30天运单 ' + Number(customer.monthly_order_count || 0) + ' 票，货量环比 ' + Number(customer.volume_mom || 0) + '%。',
+        Number(customer.credit?.balance_due || 0) > 0 ? '当前存在应收余额，建议同步关注账期与回款进度。' : '当前无逾期应收压力，可继续推进业务增量。',
+      ];
+      return jsonResponse({ ok: true, customer_name: customer.company_name, risk_level: riskLevel, risk_color: riskColor, risk_action: riskLevel === '高' ? '建议立即安排客户拜访，核查货量下滑和回款风险。' : riskLevel === '中' ? '建议本周完成一次有效跟进并更新下一步计划。' : '客户状态稳定，建议结合旺季计划推动增购与交叉销售。', insights, score_breakdown: { 货量表现: Math.max(0, Math.min(100, 70 + Number(customer.volume_mom || 0))), 回款表现: Number(customer.credit?.days_aged || 0) > 60 ? 45 : 85, 活跃互动: Math.min(100, 55 + Number(customer.monthly_order_count || 0) * 4) } });
     }
     if (path === '/api/reminders/list') return jsonResponse({ ok: true, reminders: [], total: 0 });
     if (path === '/api/v1/crm/moments' && method === 'GET') {
@@ -347,7 +363,7 @@
     if (!items.length && customer.latest_follow) return [{ content: customer.latest_follow.content, created_by: customer.latest_follow.created_by, created_at: customer.last_followup_at, activity_type: 'follow' }];
     return items;
   }
-  function showCustomerDetail(id) {
+  function showCustomerQuickDetail(id) {
     const customer = customers.find(item => Number(item.id) === Number(id));
     if (!customer || typeof window.openModal !== 'function') return;
     const activities = activityList(customer);
@@ -359,10 +375,17 @@
       + '<div style="display:flex;justify-content:space-between;align-items:center;margin-top:14px;"><h4>跟进记录</h4><button class="btn btn-primary btn-sm" onclick="openCustomerFollowForm(' + customer.id + ')">+ 添加跟进</button></div><div>' + activityHtml + '</div>'
       + '<div class="modal-actions"><button class="btn btn-outline" onclick="closeModal()">关闭</button></div></div>');
   }
+  function showCustomerDetail(id) {
+    if (Number(id) >= 1 && Number(id) <= 10) {
+      location.href = prefix + '/customer/' + Number(id) + '/';
+      return;
+    }
+    showCustomerQuickDetail(id);
+  }
   function openCustomerFollowForm(id) {
     const customer = customers.find(item => Number(item.id) === Number(id));
     if (!customer) return;
-    window.openModal('<h3>新增客户跟进</h3><div class="modal-field"><label>客户</label><input value="' + esc(customer.company_name) + '" readonly></div><div class="modal-field"><label>跟进类型</label><select id="staticCustomerActivityType"><option value="电话">电话</option><option value="拜访">拜访</option><option value="会议">会议</option><option value="邮件">邮件</option></select></div><div class="modal-field"><label>跟进内容</label><textarea id="staticCustomerActivityContent" rows="4" placeholder="请输入本次跟进内容"></textarea></div><div class="modal-actions"><button class="btn btn-outline" onclick="showCustomerDetail(' + id + ')">取消</button><button class="btn btn-primary" onclick="saveCustomerFollow(' + id + ')">保存跟进</button></div>');
+    window.openModal('<h3>新增客户跟进</h3><div class="modal-field"><label>客户</label><input value="' + esc(customer.company_name) + '" readonly></div><div class="modal-field"><label>跟进类型</label><select id="staticCustomerActivityType"><option value="电话">电话</option><option value="拜访">拜访</option><option value="会议">会议</option><option value="邮件">邮件</option></select></div><div class="modal-field"><label>跟进内容</label><textarea id="staticCustomerActivityContent" rows="4" placeholder="请输入本次跟进内容"></textarea></div><div class="modal-actions"><button class="btn btn-outline" onclick="closeModal()">取消</button><button class="btn btn-primary" onclick="saveCustomerFollow(' + id + ')">保存跟进</button></div>');
   }
   function saveCustomerFollow(id) {
     const content = document.getElementById('staticCustomerActivityContent').value.trim();
@@ -372,8 +395,8 @@
     customerActivities[id] = [activity].concat(customerActivities[id] || []);
     customers = customers.map(item => Number(item.id) === Number(id) ? { ...item, latest_follow: { content, created_by: '张晓明' }, last_followup_at: activity.created_at } : item);
     write('tiantu_admin_customer_activities', customerActivities); saveCustomers();
-    window.showToast('跟进记录已保存');
-    showCustomerDetail(id);
+    window.closeModal(); window.showToast('跟进记录已保存');
+    renderOpportunityCards();
   }
 
   function exportCustomers() {
@@ -473,6 +496,41 @@
     window.openModal('<h3>📦 ' + esc(customer.company_name) + ' - 近期订单</h3><div class="table-wrap"><table><thead><tr><th>运单号</th><th>线路</th><th>状态</th><th>货量</th><th>营收</th></tr></thead><tbody>' + rows + '</tbody></table></div><div class="modal-actions"><button class="btn btn-outline" onclick="closeModal()">关闭</button></div>');
   }
 
+  function hydrateCustomerDetailPage() {
+    const match = location.pathname.match(/\/customer\/(\d+)\/?$/);
+    if (!match) return;
+    const id = Number(match[1]);
+    const customer = customers.find(item => Number(item.id) === id);
+    if (!customer) return;
+    const stage = stageOf(customer);
+    const stageClass = { developing: 'developing', quoted: 'negotiating', cooperating: 'cooperating', churned: 'archived' }[stage];
+    const stageBadge = document.querySelector('.stage-badge');
+    if (stageBadge) {
+      stageBadge.className = 'stage-badge ' + stageClass;
+      stageBadge.textContent = stageLabels[stage] || stage;
+    }
+    const statusPanel = Array.from(document.querySelectorAll('.panel')).find(panel => panel.querySelector('.panel-header')?.textContent.includes('客户状态'));
+    const statusValue = statusPanel?.querySelector('.panel-body > div');
+    if (statusValue) statusValue.textContent = lifecycleLabels[customer.lifecycle_status] || customer.lifecycle_status;
+
+    const logPanel = Array.from(document.querySelectorAll('.panel')).find(panel => panel.querySelector('.panel-header')?.textContent.includes('跟进记录与状态变更日志'));
+    const logBody = logPanel?.querySelector('.panel-body');
+    const localItems = customerActivities[id] || [];
+    if (logBody && localItems.length) {
+      const typeMeta = { call: ['📞 电话', 'badge-blue'], meeting: ['🤝 会议', 'badge-green'], email: ['📧 邮件', 'badge-yellow'], visit: ['🏢 拜访', 'badge-gray'], status_change: ['🔄 状态流转', 'badge-purple'] };
+      const html = localItems.map(function (activity) {
+        const meta = typeMeta[activity.activity_type] || [activity.activity_type || '跟进', 'badge-gray'];
+        let images = '';
+        try {
+          const urls = activity.image_urls ? JSON.parse(activity.image_urls) : [];
+          images = urls.length ? '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;">' + urls.map(url => '<img src="' + esc(url) + '" style="width:72px;height:72px;border-radius:6px;object-fit:cover;cursor:pointer;" onclick="previewFullImage(this.src)">').join('') + '</div>' : '';
+        } catch (_) {}
+        return '<div style="padding:8px 0;border-bottom:1px solid var(--border);"><div class="flex-between"><span class="badge ' + meta[1] + '">' + meta[0] + '</span><span class="text-sm">' + esc(activity.created_at || '') + '</span></div><div style="font-size:13px;margin-top:4px;">' + esc(activity.content || '') + '</div>' + images + '<div class="text-sm">操作人: ' + esc(activity.created_by || '张晓明') + '</div></div>';
+      }).join('');
+      logBody.insertAdjacentHTML('afterbegin', html);
+    }
+  }
+
   Object.assign(window, { showCustomerDetail, openCustomerFollowForm, saveCustomerFollow, saveMarketing, renderOpportunityCards, setOpportunityStage, showStatusPicker, pickOpportunityStage, showQuickFollowUp, openVolumeTrend, openOrderDrill });
 
   document.addEventListener('DOMContentLoaded', function () {
@@ -490,13 +548,10 @@
     window.exportList = exportCustomers;
     window.placeholderAction = showManagementAction;
     if (document.getElementById('leadTableBody')) renderLeadPage();
+    hydrateCustomerDetailPage();
     if (/\/customers\/?$/.test(location.pathname) && new URLSearchParams(location.search).get('view') === 'opportunities') {
       renderOpportunitiesPage();
     }
-    const badge = document.createElement('div');
-    badge.textContent = '静态完整功能版 · 数据保存在当前浏览器';
-    badge.style.cssText = 'position:fixed;right:16px;bottom:14px;z-index:9999;background:#111827;color:#fff;padding:7px 11px;border-radius:6px;font-size:12px;box-shadow:0 4px 14px #0003';
-    document.body.appendChild(badge);
   });
 })();
 
