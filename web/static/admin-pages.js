@@ -1,6 +1,7 @@
 ﻿(function () {
   const prefix = '/tiantu-crm-admin/web';
   const originalFetch = window.fetch.bind(window);
+  const referenceData = window.__TIANTU_CRM_REFERENCE__ || {};
   const jsonResponse = (data, status = 200) => Promise.resolve(new Response(JSON.stringify(data), {
     status,
     headers: { 'Content-Type': 'application/json; charset=utf-8' },
@@ -92,20 +93,44 @@
     return stored.concat(seed.filter(item => !ids.has(item.id)).map(clone));
   }
 
-  let leads = read('tiantu_admin_leads', seedLeads);
-  let customers = read('tiantu_admin_customers', seedCustomers);
-  if (localStorage.getItem('tiantu_admin_schema') !== '3') {
-    leads = mergeSeed(leads, seedLeads);
-    customers = mergeSeed(customers, seedCustomers).map(function (customer) {
-      const base = seedCustomers.find(item => item.id === customer.id) || {};
-      return { ...base, ...customer };
+  const baseLeads = referenceData.leads?.length ? clone(referenceData.leads) : clone(seedLeads);
+  const baseCustomers = referenceData.customers?.length ? referenceData.customers.map(function (customer) {
+    return { ...(seedCustomers.find(item => Number(item.id) === Number(customer.id)) || {}), ...clone(customer) };
+  }) : clone(seedCustomers);
+  let leads = read('tiantu_admin_leads', baseLeads);
+  let customers = read('tiantu_admin_customers', baseCustomers);
+  let leadFollowUps = read('tiantu_admin_lead_followups', {});
+  if (localStorage.getItem('tiantu_admin_schema') !== '4') {
+    const mutableLeadKeys = ['lead_status', 'lead_status_label', 'owner', 'owner_id', 'follow_count', 'last_followed', 'next_follow_at', 'latest_follow'];
+    const mutableCustomerKeys = ['follow_status', 'follow_status_label', 'ownership_status', 'ownership_label', 'owner', 'owner_id', 'pool_name', 'latest_follow', 'last_followup_at', 'protect_expire_at', 'closed_at', 'lifecycle_status'];
+    const previousLeads = leads;
+    const previousCustomers = customers;
+    leads = baseLeads.map(function (base) {
+      const previous = previousLeads.find(item => Number(item.id) === Number(base.id));
+      const oldSeed = seedLeads.find(item => Number(item.id) === Number(base.id));
+      if (!previous || !oldSeed) return base;
+      const changed = mutableLeadKeys.some(key => JSON.stringify(previous[key]) !== JSON.stringify(oldSeed[key]));
+      return changed ? { ...base, ...Object.fromEntries(mutableLeadKeys.map(key => [key, previous[key]])) } : base;
+    }).concat(previousLeads.filter(item => !baseLeads.some(base => Number(base.id) === Number(item.id))));
+    customers = baseCustomers.map(function (base) {
+      const previous = previousCustomers.find(item => Number(item.id) === Number(base.id));
+      const oldSeed = seedCustomers.find(item => Number(item.id) === Number(base.id));
+      if (!previous || !oldSeed) return base;
+      const changed = mutableCustomerKeys.some(key => JSON.stringify(previous[key]) !== JSON.stringify(oldSeed[key]));
+      return changed ? { ...base, ...Object.fromEntries(mutableCustomerKeys.map(key => [key, previous[key]])) } : base;
+    }).concat(previousCustomers.filter(item => !baseCustomers.some(base => Number(base.id) === Number(item.id))));
+    const referenceFollowUps = {};
+    Object.entries(referenceData.lead_details || {}).forEach(function ([id, detail]) { referenceFollowUps[id] = clone(detail.follow_ups || []); });
+    Object.entries(referenceFollowUps).forEach(function ([id, items]) {
+      const localAdditions = (leadFollowUps[id] || []).filter(item => Number(item.id) > 1000000000);
+      leadFollowUps[id] = items.concat(localAdditions.filter(local => !items.some(item => item.id === local.id)));
     });
     write('tiantu_admin_leads', leads);
     write('tiantu_admin_customers', customers);
-    localStorage.setItem('tiantu_admin_schema', '3');
+    write('tiantu_admin_lead_followups', leadFollowUps);
+    localStorage.setItem('tiantu_admin_schema', '4');
   }
 
-  let leadFollowUps = read('tiantu_admin_lead_followups', {});
   let customerActivities = read('tiantu_admin_customer_activities', {});
   leads.forEach(function (lead) {
     if (!leadFollowUps[lead.id]) {
@@ -273,6 +298,7 @@
     }
     if (/^\/api\/customers\/\d+\/trend$/.test(path) && method === 'GET') {
       const id = Number(path.split('/')[3]);
+      if (referenceData.trends?.[id]) return jsonResponse(clone(referenceData.trends[id]));
       const customer = customers.find(c => Number(c.id) === id) || {};
       const average = Number(customer.avg_monthly_volume || 0);
       const weights = [0.72, 0.81, 0.9, 1.08, 0.96, 1];
@@ -281,9 +307,10 @@
     }
     if (/^\/api\/customers\/\d+\/orders$/.test(path) && method === 'GET') {
       const id = Number(path.split('/')[3]);
+      if (referenceData.orders?.[id]) return jsonResponse(clone(referenceData.orders[id]));
       const customer = customers.find(c => Number(c.id) === id) || {};
       const count = Math.max(1, Number(customer.monthly_order_count || 1));
-      const orders = Array.from({ length: Math.min(6, count) }, (_, index) => ({ id: id * 100 + index, tracking_number: (customer.latest_order && customer.latest_order.tracking_number) || ('TT202608' + id + String(index + 1).padStart(3, '0')), route: customer.usual_routes || '-', status: index === 0 ? '运输中' : '已签收', created_at: '2026-08-' + String(13 - index).padStart(2, '0'), volume_cbm: Number(((customer.avg_monthly_volume || 1) / count).toFixed(1)), revenue: Number(((customer.avg_monthly_revenue || 0) / count).toFixed(0)) }));
+      const orders = Array.from({ length: Math.min(6, count) }, (_, index) => ({ id: id * 100 + index, tracking_number: (customer.latest_order && customer.latest_order.tracking_number) || ('TT202608' + id + String(index + 1).padStart(3, '0')), route_detail: customer.usual_routes || '-', cargo_desc: customer.main_category || '-', weight_kg: Number(((customer.avg_monthly_volume || 1) * 1000 / count).toFixed(1)), etd: '2026-08-' + String(13 - index).padStart(2, '0'), status: index === 0 ? 'transit' : 'delivered', volume_cbm: Number(((customer.avg_monthly_volume || 1) / count).toFixed(1)), revenue: Number(((customer.avg_monthly_revenue || 0) / count).toFixed(0)) }));
       return jsonResponse({ ok: true, orders });
     }
     if (/^\/api\/customer\/\d+\/transition$/.test(path) && method === 'POST') {
@@ -305,6 +332,7 @@
     }
     if (path === '/api/ai/customer_insight' && method === 'GET') {
       const id = Number(url.searchParams.get('customer_id'));
+      if (referenceData.ai_insights?.[id]) return jsonResponse(clone(referenceData.ai_insights[id]));
       const customer = customers.find(item => Number(item.id) === id);
       if (!customer) return jsonResponse({ ok: false, msg: '客户不存在' }, 404);
       const score = Number(customer.health_score || 70);
@@ -338,20 +366,30 @@
   function renderLeadPage() {
     const tbody = document.getElementById('leadTableBody');
     if (!tbody) return;
-    tbody.innerHTML = leads.map(function (lead) {
+    const mutableKeys = ['lead_status', 'lead_status_label', 'owner', 'owner_id', 'follow_count', 'last_followed', 'next_follow_at', 'latest_follow'];
+    leads.forEach(function (lead) {
       const status = Number(lead.lead_status);
-      const statusBadge = status === 0 ? '<span class="badge badge-gray">🌊 公海</span>' : status === 1 ? '<span class="badge badge-blue">🔒 私海</span>' : '<span class="badge badge-green">✅ 已转化</span>';
-      const owner = lead.owner ? esc(lead.owner) : '<span style="color:var(--text-secondary);">-</span>';
-      const countdown = status === 1 ? '<span class="countdown-warn" style="font-family:monospace;">⏱ 剩 168h</span>' : status === 2 ? '<span style="color:var(--success);font-size:12px;">已转化</span>' : '<span style="color:var(--text-secondary);">-</span>';
-      const action = status === 0 ? '<button class="btn btn-primary btn-sm" onclick="claimLead(' + lead.id + ')">认领</button> ' : status === 1 ? '<button class="btn btn-outline btn-sm" onclick="openDetailModal(' + lead.id + ')">跟进</button> ' : '';
-      return '<tr data-lead-id="' + lead.id + '" data-pool="' + status + '" data-market="' + esc(lead.target_market || '') + '" data-logistics="' + esc(lead.logistics_type || '') + '" data-search="' + esc([lead.company_name, lead.contact_mobile, lead.contact_name].join(' ')) + '">'
-        + '<td><input type="checkbox" class="lead-checkbox" value="' + lead.id + '" onchange="updateBatchBar()"></td>'
-        + '<td><a href="javascript:void(0)" onclick="openDetailModal(' + lead.id + ')" style="font-weight:600;color:var(--primary-light);">' + esc(lead.company_name) + '</a></td>'
-        + '<td>' + esc(lead.contact_name || '-') + '</td><td style="font-family:monospace;font-size:13px;">' + esc(lead.contact_mobile || '-') + '</td>'
-        + '<td><span class="badge badge-blue">' + esc(lead.logistics_type || '-') + '</span></td><td>' + esc(lead.target_market || '-') + '</td>'
-        + '<td>' + statusBadge + '</td><td>' + owner + '</td><td>' + countdown + '</td>'
-        + '<td>' + action + '<button class="btn btn-outline btn-sm" onclick="openDetailModal(' + lead.id + ')">详情</button></td></tr>';
-    }).join('');
+      let row = tbody.querySelector('tr[data-lead-id="' + lead.id + '"]');
+      const original = baseLeads.find(item => Number(item.id) === Number(lead.id));
+      const changed = !original || mutableKeys.some(key => JSON.stringify(lead[key]) !== JSON.stringify(original[key]));
+      if (!row) {
+        row = document.createElement('tr');
+        row.dataset.leadId = lead.id;
+        row.dataset.pool = status;
+        row.dataset.market = lead.target_market || '';
+        row.dataset.logistics = lead.logistics_type || '';
+        row.dataset.search = [lead.company_name, lead.contact_mobile, lead.contact_name].join(' ');
+        row.innerHTML = '<td><input type="checkbox" class="lead-checkbox" value="' + lead.id + '" onchange="updateBatchBar()"></td><td><a href="javascript:void(0)" onclick="openDetailModal(' + lead.id + ')" style="font-weight:600;color:var(--primary-light);">' + esc(lead.company_name) + '</a></td><td>' + esc(lead.contact_name || '-') + '</td><td style="font-family:monospace;font-size:13px;">' + esc(lead.contact_mobile || '-') + '</td><td><span class="badge badge-blue">' + esc(lead.logistics_type || '-') + '</span></td><td>' + esc(lead.target_market || '-') + '</td><td></td><td></td><td></td><td></td>';
+        tbody.prepend(row);
+      }
+      if (!changed) return;
+      row.dataset.pool = status;
+      const cells = row.children;
+      cells[6].innerHTML = status === 0 ? '<span class="badge badge-gray">🌊 公海</span>' : status === 1 ? '<span class="badge badge-blue">🔒 私海</span>' : '<span class="badge badge-green">✅ 已转化</span>';
+      cells[7].innerHTML = lead.owner ? esc(lead.owner) : '<span style="color:var(--text-secondary);">-</span>';
+      cells[8].innerHTML = status === 1 ? '<span class="countdown-warn" style="font-family:monospace;">⏱ 剩 168h</span>' : status === 2 ? '<span style="color:var(--success);font-size:12px;">已转化</span>' : '<span style="color:var(--text-secondary);">-</span>';
+      cells[9].innerHTML = (status === 0 ? '<button class="btn btn-primary btn-sm" onclick="claimLead(' + lead.id + ')">认领</button> ' : status === 1 ? '<button class="btn btn-outline btn-sm" onclick="openDetailModal(' + lead.id + ')">跟进</button> ' : '') + '<button class="btn btn-outline btn-sm" onclick="openDetailModal(' + lead.id + ')">详情</button>';
+    });
     const values = document.querySelectorAll('.stats-grid .stat-card .value');
     const counts = [leads.length, leads.filter(item => item.lead_status === 0).length, leads.filter(item => item.lead_status === 1).length, leads.filter(item => item.lead_status === 2).length];
     values.forEach((node, index) => { if (counts[index] !== undefined) node.textContent = counts[index]; });
@@ -531,6 +569,31 @@
     }
   }
 
+  function hydrateOpportunityPage() {
+    if (!/\/opportunities\/?$/.test(location.pathname)) return;
+    document.querySelectorAll('.customer-card[data-cid]').forEach(function (card) {
+      const id = Number(card.dataset.cid);
+      const customer = customers.find(item => Number(item.id) === id);
+      if (!customer) return;
+      const previousStage = card.dataset.stage;
+      const currentStage = stageOf(customer);
+      card.dataset.stage = currentStage;
+      const statusButton = card.querySelector('.status-dropdown-btn');
+      if (statusButton) {
+        statusButton.className = 'status-dropdown-btn ' + (customer.lifecycle_status || 'contacted');
+        statusButton.textContent = (lifecycleLabels[customer.lifecycle_status] || customer.lifecycle_status) + ' ▾';
+        statusButton.setAttribute('onclick', "event.stopPropagation();showStatusPicker(" + id + ", '" + (customer.lifecycle_status || 'contacted') + "')");
+      }
+      const stageTag = Array.from(card.querySelectorAll('.card-tags span')).find(node => node.textContent.trim() === (stageLabels[previousStage] || previousStage));
+      if (stageTag) stageTag.textContent = stageLabels[currentStage] || currentStage;
+      const ownerTag = card.querySelector('.card-tags span[title="跟进人"]');
+      if (ownerTag) {
+        ownerTag.textContent = customer.owner ? '👤 ' + customer.owner : '';
+        ownerTag.style.display = customer.owner ? '' : 'none';
+      }
+    });
+  }
+
   Object.assign(window, { showCustomerDetail, openCustomerFollowForm, saveCustomerFollow, saveMarketing, renderOpportunityCards, setOpportunityStage, showStatusPicker, pickOpportunityStage, showQuickFollowUp, openVolumeTrend, openOrderDrill });
 
   document.addEventListener('DOMContentLoaded', function () {
@@ -549,9 +612,7 @@
     window.placeholderAction = showManagementAction;
     if (document.getElementById('leadTableBody')) renderLeadPage();
     hydrateCustomerDetailPage();
-    if (/\/customers\/?$/.test(location.pathname) && new URLSearchParams(location.search).get('view') === 'opportunities') {
-      renderOpportunitiesPage();
-    }
+    hydrateOpportunityPage();
   });
 })();
 
