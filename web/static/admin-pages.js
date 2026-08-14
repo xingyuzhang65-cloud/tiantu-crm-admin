@@ -14,15 +14,51 @@
     { id: 5, company_name: '东莞联达塑胶制品有限公司', contact_name: '孙经理', contact_mobile: '13800138005', logistics_type: '海派', target_market: '欧洲', lead_status: 0, lead_status_label: '公海待认领', owner: null, owner_id: null, follow_count: 0, source: '转介绍', country: '中国', latest_follow: { content: '客户关注欧洲海派时效。', created_by: '系统' } },
     { id: 6, company_name: '宁波远洋国际贸易有限公司', contact_name: '周董', contact_mobile: '13800138006', logistics_type: '海派', target_market: '美国', lead_status: 1, lead_status_label: '私海跟进中', owner: '张晓明', owner_id: 1, follow_count: 8, source: '展会', country: '中国', latest_follow: { content: '关注鹿特丹 DDP 条款与清关能力。', created_by: '张晓明' } },
     { id: 7, company_name: 'AmazonSeller-DE GmbH', contact_name: 'Michael Braun', contact_mobile: '+49-176-1234567', logistics_type: 'FBA', target_market: '欧洲', lead_status: 0, lead_status_label: '公海待认领', owner: null, owner_id: null, follow_count: 0, source: '独立站', country: '德国', latest_follow: { content: '德国站卖家线索，等待认领。', created_by: '系统' } },
+    { id: 8, company_name: '同行-深圳快运通', contact_name: '黄某', contact_mobile: '13800138007', logistics_type: '一件代发', target_market: '中东', lead_status: 2, lead_status_label: '已转化', owner: '李强', owner_id: 2, follow_count: 2, source: '海关数据', country: '中国', latest_follow: { content: '同行客户，主要做中东市场，希望合作互补。', created_by: '李强' } },
   ];
 
   const seedCustomers = [
+    { id: 1, customer_name: '深圳思科达电子有限公司', company_name: '深圳思科达电子有限公司', contact_name: '陈总', mobile: '13800138001', masked_mobile: '138****8001', hot_contact: { name: '陈总', mobile: '138****8001' }, source: '已登记', tags: ['A', '直客'], follow_status: 'CLOSED', follow_status_label: '成交', ownership_status: 'CLOSED_CUSTOMER', ownership_label: '成交客户', owner: '张晓明', owner_id: 1, latest_follow: { content: '发送Q2季度运输方案：美森主线+盐田备线，已确认', created_by: '张晓明' }, credit: { balance_due: 120000, days_aged: 18 }, latest_order: { tracking_number: 'SCD202604001UK', status: 'delivered' }, lifecycle_status: 'active', avg_monthly_volume: 45.5, avg_monthly_revenue: 285000, volume_mom: 12, monthly_order_count: 8, health_score: 92, main_category: '消费电子', shipping_frequency: '每周', usual_routes: '深圳→洛杉矶 / 英国' },
     { id: 2, customer_name: '义乌欧凯进出口有限公司', company_name: '义乌欧凯进出口有限公司', contact_name: '王芳', mobile: '13800138003', masked_mobile: '138****8003', hot_contact: { name: '王芳', mobile: '138****8003' }, source: '已登记', tags: ['A', '直客'], follow_status: 'INTERESTED', follow_status_label: '有意向', ownership_status: 'MY_CUSTOMER', ownership_label: '我的客户', owner: '李强', owner_id: 2, latest_follow: { content: '确认圣诞季备货计划，需提前预订舱位', created_by: '李强' }, credit: { balance_due: 350000, days_aged: 25 }, latest_order: { tracking_number: 'OKE202604001DE', status: 'departed' } },
     { id: 3, customer_name: '宁波远洋国际贸易有限公司', company_name: '宁波远洋国际贸易有限公司', contact_name: '周董', mobile: '13800138006', masked_mobile: '138****8006', hot_contact: { name: '周董', mobile: '138****8006' }, source: '已登记', tags: ['B', '同行'], follow_status: 'QUOTED', follow_status_label: '报价', ownership_status: 'MY_CUSTOMER', ownership_label: '我的客户', owner: '张晓明', owner_id: 1, latest_follow: { content: '鹿特丹查验延误，正在协调处理', created_by: '张晓明' }, credit: { balance_due: 280000, days_aged: 55 }, latest_order: { tracking_number: 'NBY202605001NL', status: 'customs' } },
     { id: 5, customer_name: '广州恒通服装贸易有限公司', company_name: '广州恒通服装贸易有限公司', contact_name: '李经理', mobile: '13800138002', masked_mobile: '138****8002', hot_contact: { name: '李经理', mobile: '138****8002' }, source: '已登记', tags: ['C', '直客'], follow_status: 'TEMP_HOLD', follow_status_label: '暂时搁置', ownership_status: 'MY_CUSTOMER', ownership_label: '我的客户', owner: '张晓明', owner_id: 1, latest_follow: { content: '欠款已超账期，需跟进近期无新单原因', created_by: '财务部' }, credit: { balance_due: 95000, days_aged: 72 }, latest_order: { tracking_number: 'HTF202605001NL', status: 'departed' } },
     { id: 8, customer_name: '深圳星链跨境电商有限公司', company_name: '深圳星链跨境电商有限公司', contact_name: '林小姐', mobile: '13800138008', masked_mobile: '138****8008', hot_contact: { name: '林小姐', mobile: '138****8008' }, source: '独立开发', tags: ['C', '直客'], follow_status: 'INITIAL_VISIT', follow_status_label: '初访', ownership_status: 'MY_CUSTOMER', ownership_label: '我的客户', owner: '张晓明', owner_id: 1, latest_follow: { content: '确认 TikTok Shop 美国小包试跑需求', created_by: '张晓明' }, credit: { balance_due: 0, days_aged: 0 }, latest_order: null },
     { id: 6, customer_name: '杭州锐思科技有限公司', company_name: '杭州锐思科技有限公司', contact_name: '赵总', mobile: '13800138004', masked_mobile: '138****8004', hot_contact: { name: '赵总', mobile: '138****8004' }, source: '已登记', tags: ['C', '同行'], follow_status: 'INTERESTED', follow_status_label: '有意向', ownership_status: 'MY_CUSTOMER', ownership_label: '我的客户', owner: '李强', owner_id: 2, latest_follow: { content: '客户对时效和在线轨迹追踪功能认可', created_by: '李强' }, credit: null, latest_order: null },
+    { id: 4, customer_name: 'AmazonSeller-DE GmbH', company_name: 'AmazonSeller-DE GmbH', contact_name: 'Michael Braun', mobile: '+49-176-1234567', masked_mobile: '+49****4567', hot_contact: { name: 'Michael Braun', mobile: '+49****4567' }, source: '独立开发', tags: ['B', '直客'], follow_status: 'QUOTED', follow_status_label: '报价', ownership_status: 'COMPANY_POOL', ownership_label: '公司池', owner: '', owner_id: null, pool_name: '客户公海（默认）', latest_follow: { content: '讨论CE认证产品运输要求，等待客户确认报价', created_by: '李强' }, credit: { balance_due: 85000, days_aged: 10 }, latest_order: { tracking_number: 'ADE202605001DE', status: 'arrived' } },
+    { id: 7, customer_name: '东莞联达塑胶制品有限公司', company_name: '东莞联达塑胶制品有限公司', contact_name: '孙经理', mobile: '13800138005', masked_mobile: '138****8005', hot_contact: { name: '孙经理', mobile: '138****8005' }, source: '已登记', tags: ['D', '直客'], follow_status: 'TEMP_HOLD', follow_status_label: '暂时搁置', ownership_status: 'COMPANY_POOL', ownership_label: '公司池', owner: '', owner_id: null, pool_name: '客户公海（默认）', latest_follow: { content: '发送归档确认邮件，保留未来合作可能', created_by: '张晓明' }, credit: null, latest_order: null },
+    { id: 9, customer_name: '厦门拓海家居用品有限公司', company_name: '厦门拓海家居用品有限公司', contact_name: '高经理', mobile: '13800138009', masked_mobile: '138****8009', hot_contact: { name: '高经理', mobile: '138****8009' }, source: '独立开发', tags: ['C', '直客'], follow_status: 'INITIAL_VISIT', follow_status_label: '初访', ownership_status: 'EXPIRING_PROTECTION', ownership_label: '即将掉保', owner: '王芳', owner_id: 3, latest_follow: { content: '客户要求欧洲海派报价，需及时继续跟进', created_by: '王芳' }, credit: { balance_due: 15000, days_aged: 12 }, latest_order: null },
+    { id: 10, customer_name: '佛山海迅贸易黑名单样例', company_name: '佛山海迅贸易黑名单样例', contact_name: '郑某', mobile: '13800138010', masked_mobile: '138****8010', hot_contact: { name: '郑某', mobile: '138****8010' }, source: '独立开发', tags: ['D', '同行'], follow_status: 'TEMP_HOLD', follow_status_label: '暂时搁置', ownership_status: 'COMPANY_POOL', ownership_label: '公司池', owner: '', owner_id: null, pool_name: '客户公海（默认）', latest_follow: { content: '资料缺失且货品疑似侵权，保留为黑名单样例', created_by: '风控部' }, credit: { balance_due: 0, days_aged: 0 }, latest_order: null },
   ];
+
+  const customerMetrics = {
+    1: ['active', 45.5, 285000, 12, 8, 92, '消费电子', '每周', '深圳→洛杉矶 / 英国'],
+    2: ['nurturing', 120, 360000, 18, 12, 88, '小商品', '每周', '义乌→杜伊斯堡'],
+    3: ['quoted', 200, 520000, -32, 16, 68, '大型设备', '每周', '宁波→鹿特丹'],
+    4: ['quoted', 32, 125000, 8, 5, 82, 'Amazon FBA', '每月', '深圳→德国'],
+    5: ['receding', 18, 68000, -42, 3, 55, '服装', '每月', '广州→欧洲'],
+    6: ['contacted', 5, 22000, 0, 1, 76, '科技产品', '不定期', '杭州→日韩'],
+    7: ['disqualified', 0, 0, 0, 0, 45, '塑胶制品', '暂停', '-'],
+    8: ['new', 8, 32000, 100, 2, 80, '跨境小包', '每周', '深圳→美国'],
+    9: ['contacted', 14.5, 48000, -12, 2, 70, '家居用品', '每月', '厦门→欧洲'],
+    10: ['churned', 0, 0, -100, 0, 20, '贸易品', '暂停', '-'],
+  };
+  seedCustomers.forEach(function (customer) {
+    const metric = customerMetrics[customer.id];
+    if (!metric) return;
+    customer.lifecycle_status = customer.lifecycle_status || metric[0];
+    customer.avg_monthly_volume = customer.avg_monthly_volume ?? metric[1];
+    customer.avg_monthly_revenue = customer.avg_monthly_revenue ?? metric[2];
+    customer.volume_mom = customer.volume_mom ?? metric[3];
+    customer.monthly_order_count = customer.monthly_order_count ?? metric[4];
+    customer.health_score = customer.health_score ?? metric[5];
+    customer.main_category = customer.main_category || metric[6];
+    customer.shipping_frequency = customer.shipping_frequency || metric[7];
+    customer.usual_routes = customer.usual_routes || metric[8];
+    customer.created_at = customer.created_at || '2026-08-13 14:07';
+    customer.last_followup_at = customer.last_followup_at || '2026-08-13 14:07';
+    customer.protect_expire_at = customer.protect_expire_at || '2026-09-12 14:07';
+    customer.closed_at = customer.closed_at || (customer.follow_status === 'CLOSED' ? '2026-08-13 14:07' : null);
+  });
 
   const seedMoments = [
     { id: 1, user_id: 1, user: { id: 1, name: '张晓明', phone: '13800138000' }, type: 'SYSTEM_KPI', content: '5月团队战报：本周新签客户3家，运单量环比增长12%，美森线满载率92%！', media_urls: [prefix + '/static/uploads/moment_chart5.jpg', prefix + '/static/uploads/moment_team2.jpg'], visible_type: 'DEPT', visible_target: [1], created_at: '2026-08-13 12:07:24', like_count: 3, user_liked: false, comments: [] },
@@ -31,41 +67,239 @@
     { id: 4, user_id: 3, user: { id: 3, name: '李强', phone: '13800138002' }, type: 'ACTIVITY', content: '盐田至鹿特丹线本周成功首航！感谢运营团队的全力配合，客户反馈时效满意度提升明显。', media_urls: [prefix + '/static/uploads/moment_warehouse7.jpg', prefix + '/static/uploads/moment_cargo3.jpg'], visible_type: 'DEPT', visible_target: [2], created_at: '2026-08-12 14:07:24', like_count: 2, user_liked: true, comments: [] },
   ];
 
+  const clone = value => JSON.parse(JSON.stringify(value));
   function read(key, seed) {
-    try { return JSON.parse(localStorage.getItem(key)) || seed; } catch (_) { return seed; }
+    try {
+      const stored = localStorage.getItem(key);
+      return stored === null ? clone(seed) : JSON.parse(stored);
+    } catch (_) { return clone(seed); }
   }
   function write(key, value) { localStorage.setItem(key, JSON.stringify(value)); }
+  function parseBody(init) {
+    if (!init || init.body === undefined || init.body instanceof FormData) return {};
+    if (typeof init.body === 'string') {
+      try { return JSON.parse(init.body); } catch (_) { return {}; }
+    }
+    return init.body || {};
+  }
+  function nowText() { return new Date().toISOString().slice(0, 16); }
+  function maskMobile(value) {
+    const phone = String(value || '');
+    return phone.length > 7 ? phone.slice(0, 3) + '****' + phone.slice(-4) : phone;
+  }
+  function mergeSeed(stored, seed) {
+    const ids = new Set(stored.map(item => item.id));
+    return stored.concat(seed.filter(item => !ids.has(item.id)).map(clone));
+  }
+
   let leads = read('tiantu_admin_leads', seedLeads);
   let customers = read('tiantu_admin_customers', seedCustomers);
+  if (localStorage.getItem('tiantu_admin_schema') !== '3') {
+    leads = mergeSeed(leads, seedLeads);
+    customers = mergeSeed(customers, seedCustomers).map(function (customer) {
+      const base = seedCustomers.find(item => item.id === customer.id) || {};
+      return { ...base, ...customer };
+    });
+    write('tiantu_admin_leads', leads);
+    write('tiantu_admin_customers', customers);
+    localStorage.setItem('tiantu_admin_schema', '3');
+  }
+
+  let leadFollowUps = read('tiantu_admin_lead_followups', {});
+  let customerActivities = read('tiantu_admin_customer_activities', {});
+  leads.forEach(function (lead) {
+    if (!leadFollowUps[lead.id]) {
+      leadFollowUps[lead.id] = lead.latest_follow ? [{
+        id: lead.id * 100,
+        status: lead.lead_status === 0 ? '新建线索' : '跟进',
+        content: lead.latest_follow.content,
+        created_by: lead.latest_follow.created_by || '系统',
+        created_at: lead.last_followed || '2026-08-13T14:07',
+        next_follow_at: lead.next_follow_at || null,
+        image_urls: '',
+      }] : [];
+    }
+  });
+  write('tiantu_admin_lead_followups', leadFollowUps);
+
+  function saveLeads() { write('tiantu_admin_leads', leads); }
+  function saveCustomers() { write('tiantu_admin_customers', customers); }
+  function stageOf(customer) {
+    const map = { new: 'developing', contacted: 'developing', nurturing: 'quoted', quoted: 'quoted', negotiating: 'quoted', trial: 'cooperating', active: 'cooperating', receding: 'cooperating', disqualified: 'churned', churned: 'churned' };
+    return map[customer.lifecycle_status] || 'developing';
+  }
+  function customerCounts() {
+    return {
+      my: customers.filter(c => c.ownership_status === 'MY_CUSTOMER').length,
+      pool: customers.filter(c => c.ownership_status === 'COMPANY_POOL').length,
+      expiring: customers.filter(c => c.ownership_status === 'EXPIRING_PROTECTION').length,
+      closed: customers.filter(c => c.ownership_status === 'CLOSED_CUSTOMER' || c.follow_status === 'CLOSED').length,
+      all: customers.length,
+    };
+  }
+  function customerFromLead(lead, opportunity) {
+    return {
+      id: Math.max(0, ...customers.map(c => Number(c.id) || 0)) + 1,
+      customer_name: lead.company_name,
+      company_name: lead.company_name,
+      contact_name: lead.contact_name || '-',
+      mobile: lead.contact_mobile || '',
+      masked_mobile: maskMobile(lead.contact_mobile),
+      hot_contact: { name: lead.contact_name || '-', mobile: maskMobile(lead.contact_mobile) },
+      source: lead.source || '线索转化',
+      tags: ['C', '新转化'],
+      follow_status: opportunity ? 'INTERESTED' : 'INITIAL_VISIT',
+      follow_status_label: opportunity ? '有意向' : '初访',
+      ownership_status: 'MY_CUSTOMER', ownership_label: '我的客户',
+      owner: lead.owner || '张晓明', owner_id: lead.owner_id || 1,
+      latest_follow: { content: opportunity ? '由线索转为商机' : '由线索转为客户', created_by: '张晓明' },
+      last_followup_at: nowText(), protect_expire_at: '2026-09-30 18:00', created_at: nowText(),
+      credit: { balance_due: 0, days_aged: 0 }, latest_order: null,
+      lifecycle_status: opportunity ? 'nurturing' : 'contacted', avg_monthly_volume: 0,
+      avg_monthly_revenue: 0, volume_mom: 0, monthly_order_count: 0, health_score: 80,
+      main_category: lead.product_interest || '-', shipping_frequency: '待确认', usual_routes: lead.target_market || '-',
+    };
+  }
+  function fileToDataUrl(file) {
+    return new Promise(function (resolve, reject) {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  }
 
   window.fetch = function (input, init = {}) {
     const raw = typeof input === 'string' ? input : input.url;
     const url = new URL(raw, location.href);
     const path = url.pathname.replace(prefix, '') || '/';
     const method = (init.method || 'GET').toUpperCase();
+    const body = parseBody(init);
 
     if (path === '/api/leads/list') return jsonResponse({ ok: true, leads, total: leads.length });
-    if (/^\/api\/leads\/\d+$/.test(path)) {
+    if (/^\/api\/leads\/\d+$/.test(path) && method === 'GET') {
       const id = Number(path.split('/').pop());
-      return jsonResponse({ ok: true, lead: leads.find((item) => item.id === id) || leads[0], activities: [] });
+      const lead = leads.find(item => item.id === id);
+      if (!lead) return jsonResponse({ ok: false, msg: '线索不存在' }, 404);
+      return jsonResponse({ ok: true, lead: { ...lead, reclaim_countdown_hours: lead.lead_status === 1 ? 168 : null }, follow_ups: leadFollowUps[id] || [] });
     }
     if (path === '/api/leads/create' && method === 'POST') {
-      const body = JSON.parse(init.body || '{}');
-      const item = { ...body, id: Date.now(), lead_status: 0, lead_status_label: '公海待认领', owner: null, owner_id: null, follow_count: 0, latest_follow: { content: '浏览器本地新建线索', created_by: '张晓明' } };
-      leads = [item, ...leads]; write('tiantu_admin_leads', leads);
-      return jsonResponse({ ok: true, lead: item });
+      const duplicate = leads.find(item => item.contact_mobile === body.contact_mobile || item.company_name === body.company_name);
+      if (duplicate) return jsonResponse({ ok: false, duplicate: true, in_pool: duplicate.lead_status === 0 ? 'public' : 'private', existing_lead_id: duplicate.id, msg: '检测到相同公司或手机号的线索' });
+      const item = { ...body, id: Date.now(), lead_status: 0, lead_status_label: '公海待认领', owner: null, owner_id: null, follow_count: 0, created_at: nowText(), latest_follow: { content: '新建线索，等待认领。', created_by: '张晓明' } };
+      leads = [item, ...leads];
+      leadFollowUps[item.id] = [];
+      saveLeads(); write('tiantu_admin_lead_followups', leadFollowUps);
+      return jsonResponse({ ok: true, msg: '线索创建成功', lead: item });
     }
     if (/^\/api\/leads\/\d+\/claim$/.test(path) && method === 'POST') {
       const id = Number(path.split('/')[3]);
-      leads = leads.map((item) => item.id === id ? { ...item, lead_status: 1, lead_status_label: '私海跟进中', owner: '张晓明', owner_id: 1 } : item);
-      write('tiantu_admin_leads', leads); return jsonResponse({ ok: true, message: '领取成功' });
+      leads = leads.map(item => item.id === id ? { ...item, lead_status: 1, lead_status_label: '私海跟进中', owner: body.user_name || '张晓明', owner_id: body.user_id || 1 } : item);
+      saveLeads();
+      return jsonResponse({ ok: true, msg: '领取成功' });
     }
-    if (/^\/api\/leads\/\d+\/follow-up$/.test(path) && method === 'POST') return jsonResponse({ ok: true, message: '跟进记录已保存到演示数据' });
-    if (/^\/api\/leads\/\d+\/convert$/.test(path) && method === 'POST') return jsonResponse({ ok: true, message: '线索已转化' });
-    if (path === '/api/crm/customers') {
+    if (path === '/api/leads/batch-to-pool' && method === 'POST') {
+      let ids = Array.isArray(body.ids) ? body.ids : [];
+      if (!ids.length) ids = Array.from(document.querySelectorAll('.lead-checkbox:checked')).map(node => Number(node.value));
+      leads = leads.map(item => ids.includes(item.id) && item.lead_status !== 2 ? { ...item, lead_status: 0, lead_status_label: '公海待认领', owner: null, owner_id: null } : item);
+      saveLeads();
+      return jsonResponse({ ok: true, msg: '已将 ' + ids.length + ' 条线索放入公海' });
+    }
+    if (/^\/api\/leads\/\d+\/follow-up$/.test(path) && method === 'POST') {
+      const id = Number(path.split('/')[3]);
+      const follow = { id: Date.now(), status: body.status || '跟进', content: body.content || '', image_urls: body.image_urls || '', next_follow_at: body.next_follow_at || null, created_by: body.created_by || '张晓明', created_at: nowText() };
+      leadFollowUps[id] = [follow].concat(leadFollowUps[id] || []);
+      leads = leads.map(item => item.id === id ? { ...item, follow_count: (item.follow_count || 0) + 1, last_followed: nowText(), next_follow_at: follow.next_follow_at, latest_follow: { content: follow.content, created_by: follow.created_by } } : item);
+      saveLeads(); write('tiantu_admin_lead_followups', leadFollowUps);
+      return jsonResponse({ ok: true, msg: '跟进记录已保存' });
+    }
+    if (/^\/api\/leads\/\d+\/convert$/.test(path) && method === 'POST') {
+      const id = Number(path.split('/')[3]);
+      const lead = leads.find(item => item.id === id);
+      if (!lead) return jsonResponse({ ok: false, msg: '线索不存在' }, 404);
+      leads = leads.map(item => item.id === id ? { ...item, lead_status: 2, lead_status_label: '已转化' } : item);
+      const opportunity = body.convert_type === 'opportunity';
+      if (!customers.some(c => c.mobile === lead.contact_mobile || c.company_name === lead.company_name)) customers.unshift(customerFromLead(lead, opportunity));
+      saveLeads(); saveCustomers();
+      return jsonResponse({ ok: true, msg: opportunity ? '线索已转化为商机' : '线索已转化为客户' });
+    }
+    if (path === '/api/leads/reclaim' && method === 'POST') {
+      const candidates = leads.filter(item => item.lead_status === 1 && item.reclaim_overdue);
+      leads = leads.map(item => candidates.some(c => c.id === item.id) ? { ...item, lead_status: 0, lead_status_label: '公海待认领', owner: null, owner_id: null } : item);
+      saveLeads();
+      return jsonResponse({ ok: true, reclaimed: candidates.length, params: { N_days: 7, M_days: 30 } });
+    }
+    if (path === '/api/upload/follow-up-image' && method === 'POST') {
+      const file = init.body instanceof FormData ? init.body.get('file') : null;
+      if (!file) return jsonResponse({ ok: false, msg: '请选择图片' }, 400);
+      return fileToDataUrl(file).then(dataUrl => jsonResponse({ ok: true, url: dataUrl }));
+    }
+    if (path === '/api/crm/customers' && method === 'GET') {
+      const tab = url.searchParams.get('tab') || 'my';
       const keyword = (url.searchParams.get('keyword') || '').toLowerCase();
-      const records = keyword ? customers.filter((item) => item.customer_name.toLowerCase().includes(keyword) || item.contact_name.toLowerCase().includes(keyword)) : customers;
-      return jsonResponse({ ok: true, records, total: records.length, page: 1, page_size: 20, tab_counts: { my: customers.length, pool: 3, expiring: 1, closed: 1, all: customers.length + 5 }, selected_all_token: 'pages-demo' });
+      const field = url.searchParams.get('keyword_field') || 'customer_name';
+      const status = url.searchParams.get('follow_status') || '';
+      const source = url.searchParams.get('source') || '';
+      let records = customers.filter(function (item) {
+        if (tab === 'my' && item.ownership_status !== 'MY_CUSTOMER') return false;
+        if (tab === 'pool' && item.ownership_status !== 'COMPANY_POOL') return false;
+        if (tab === 'expiring' && item.ownership_status !== 'EXPIRING_PROTECTION') return false;
+        if (tab === 'closed' && item.ownership_status !== 'CLOSED_CUSTOMER' && item.follow_status !== 'CLOSED') return false;
+        if (keyword && !String(item[field] || item.customer_name || '').toLowerCase().includes(keyword)) return false;
+        if (status && item.follow_status !== status) return false;
+        if (source && item.source !== source) return false;
+        return true;
+      });
+      const page = Number(url.searchParams.get('page') || 1);
+      const pageSize = Number(url.searchParams.get('page_size') || 20);
+      const total = records.length;
+      records = records.slice((page - 1) * pageSize, page * pageSize);
+      return jsonResponse({ ok: true, records, total, page, page_size: pageSize, tab_counts: customerCounts(), selected_all_token: tab + ':' + total });
+    }
+    if (/^\/api\/crm\/customers\/batch\//.test(path) && method === 'POST') {
+      const ids = Array.isArray(body.ids) ? body.ids.map(Number) : [];
+      const statusLabels = { INITIAL_VISIT: '初访', INTERESTED: '有意向', QUOTED: '报价', CLOSED: '成交', TEMP_HOLD: '暂时搁置' };
+      if (path.endsWith('/delete')) customers = customers.filter(item => !ids.includes(Number(item.id)));
+      else customers = customers.map(function (item) {
+        if (!ids.includes(Number(item.id))) return item;
+        if (path.endsWith('/update-status')) return { ...item, follow_status: body.status, follow_status_label: statusLabels[body.status] || body.status, ownership_status: body.status === 'CLOSED' ? 'CLOSED_CUSTOMER' : item.ownership_status, ownership_label: body.status === 'CLOSED' ? '成交客户' : item.ownership_label, closed_at: body.status === 'CLOSED' ? nowText() : item.closed_at };
+        if (path.endsWith('/claim')) return { ...item, owner: body.owner || '张晓明', owner_id: 1, ownership_status: 'MY_CUSTOMER', ownership_label: '我的客户', pool_name: '' };
+        if (path.endsWith('/transfer-owner')) return { ...item, owner: body.owner || '张晓明', owner_id: 1 };
+        if (path.endsWith('/return-pool')) return { ...item, owner: '', owner_id: null, ownership_status: 'COMPANY_POOL', ownership_label: '公司池', pool_name: '客户公海（默认）' };
+        return item;
+      });
+      saveCustomers();
+      return jsonResponse({ ok: true, msg: '已完成 ' + ids.length + ' 个客户的操作' });
+    }
+    if (/^\/api\/customers\/\d+\/trend$/.test(path) && method === 'GET') {
+      const id = Number(path.split('/')[3]);
+      const customer = customers.find(c => Number(c.id) === id) || {};
+      const average = Number(customer.avg_monthly_volume || 0);
+      const weights = [0.72, 0.81, 0.9, 1.08, 0.96, 1];
+      const labels = ['03月', '04月', '05月', '06月', '07月', '08月'];
+      return jsonResponse({ ok: true, trend: labels.map((label, index) => ({ label, month: '2026-' + String(index + 3).padStart(2, '0'), volume: Number((average * weights[index]).toFixed(1)) })) });
+    }
+    if (/^\/api\/customers\/\d+\/orders$/.test(path) && method === 'GET') {
+      const id = Number(path.split('/')[3]);
+      const customer = customers.find(c => Number(c.id) === id) || {};
+      const count = Math.max(1, Number(customer.monthly_order_count || 1));
+      const orders = Array.from({ length: Math.min(6, count) }, (_, index) => ({ id: id * 100 + index, tracking_number: (customer.latest_order && customer.latest_order.tracking_number) || ('TT202608' + id + String(index + 1).padStart(3, '0')), route: customer.usual_routes || '-', status: index === 0 ? '运输中' : '已签收', created_at: '2026-08-' + String(13 - index).padStart(2, '0'), volume_cbm: Number(((customer.avg_monthly_volume || 1) / count).toFixed(1)), revenue: Number(((customer.avg_monthly_revenue || 0) / count).toFixed(0)) }));
+      return jsonResponse({ ok: true, orders });
+    }
+    if (/^\/api\/customer\/\d+\/transition$/.test(path) && method === 'POST') {
+      const id = Number(path.split('/')[3]);
+      const target = url.searchParams.get('target') || url.searchParams.get('stage') || body.stage || 'contacted';
+      customers = customers.map(item => Number(item.id) === id ? { ...item, lifecycle_status: target } : item);
+      saveCustomers();
+      return jsonResponse({ ok: true, msg: '客户阶段已更新' });
+    }
+    if (/^\/api\/customer\/\d+\/add-activity$/.test(path) && method === 'POST') {
+      const id = Number(path.split('/')[3]);
+      const activity = { id: Date.now(), content: url.searchParams.get('content') || body.content || '', activity_type: url.searchParams.get('activity_type') || body.activity_type || 'follow', created_by: '张晓明', created_at: nowText(), image_urls: url.searchParams.get('image_urls') || body.image_urls || '' };
+      customerActivities[id] = [activity].concat(customerActivities[id] || []);
+      customers = customers.map(item => Number(item.id) === id ? { ...item, latest_follow: { content: activity.content, created_by: activity.created_by }, last_followup_at: activity.created_at } : item);
+      write('tiantu_admin_customer_activities', customerActivities); saveCustomers();
+      return jsonResponse({ ok: true, msg: '跟进记录已保存' });
     }
     if (path === '/api/reminders/list') return jsonResponse({ ok: true, reminders: [], total: 0 });
     if (path === '/api/v1/crm/moments' && method === 'GET') {
@@ -73,17 +307,173 @@
       return jsonResponse({ ok: true, items: moments, total: moments.length, page: 1, page_size: 50, has_more: false });
     }
     if (path === '/api/v1/crm/moments' && method === 'POST') {
-      const body = JSON.parse(init.body || '{}');
       const moments = read('tiantu_admin_moments', seedMoments);
       const item = { id: Date.now(), user_id: 1, user: { id: 1, name: '张晓明', phone: '13800138000' }, type: body.type || 'DAILY', content: body.content || '', media_urls: [], visible_type: body.visible_type || 'ALL', visible_target: null, created_at: new Date().toLocaleString('zh-CN'), like_count: 0, user_liked: false, comments: [] };
       write('tiantu_admin_moments', [item, ...moments]);
       return jsonResponse({ ok: true, item });
     }
     if (/^\/api\/v1\/crm\/moments\/\d+\/like$/.test(path) && method === 'POST') return jsonResponse({ ok: true, liked: true });
-    if (/^\/api\/v1\/crm\/moments\/\d+\/comment$/.test(path) && method === 'POST') return jsonResponse({ ok: true, message: '评论已保存到演示数据' });
-    if (path.startsWith('/api/') && method !== 'GET') return jsonResponse({ ok: true, message: '演示操作已保存到当前浏览器' });
+    if (/^\/api\/v1\/crm\/moments\/\d+\/comment$/.test(path) && method === 'POST') return jsonResponse({ ok: true, msg: '评论已保存' });
+    if (path.startsWith('/api/')) return jsonResponse({ ok: false, msg: '当前静态版尚未实现该接口：' + path }, 404);
     return originalFetch(input, init);
   };
+
+  const esc = value => String(value ?? '').replace(/[&<>"']/g, character => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[character]));
+  function renderLeadPage() {
+    const tbody = document.getElementById('leadTableBody');
+    if (!tbody) return;
+    tbody.innerHTML = leads.map(function (lead) {
+      const status = Number(lead.lead_status);
+      const statusBadge = status === 0 ? '<span class="badge badge-gray">🌊 公海</span>' : status === 1 ? '<span class="badge badge-blue">🔒 私海</span>' : '<span class="badge badge-green">✅ 已转化</span>';
+      const owner = lead.owner ? esc(lead.owner) : '<span style="color:var(--text-secondary);">-</span>';
+      const countdown = status === 1 ? '<span class="countdown-warn" style="font-family:monospace;">⏱ 剩 168h</span>' : status === 2 ? '<span style="color:var(--success);font-size:12px;">已转化</span>' : '<span style="color:var(--text-secondary);">-</span>';
+      const action = status === 0 ? '<button class="btn btn-primary btn-sm" onclick="claimLead(' + lead.id + ')">认领</button> ' : status === 1 ? '<button class="btn btn-outline btn-sm" onclick="openDetailModal(' + lead.id + ')">跟进</button> ' : '';
+      return '<tr data-lead-id="' + lead.id + '" data-pool="' + status + '" data-market="' + esc(lead.target_market || '') + '" data-logistics="' + esc(lead.logistics_type || '') + '" data-search="' + esc([lead.company_name, lead.contact_mobile, lead.contact_name].join(' ')) + '">'
+        + '<td><input type="checkbox" class="lead-checkbox" value="' + lead.id + '" onchange="updateBatchBar()"></td>'
+        + '<td><a href="javascript:void(0)" onclick="openDetailModal(' + lead.id + ')" style="font-weight:600;color:var(--primary-light);">' + esc(lead.company_name) + '</a></td>'
+        + '<td>' + esc(lead.contact_name || '-') + '</td><td style="font-family:monospace;font-size:13px;">' + esc(lead.contact_mobile || '-') + '</td>'
+        + '<td><span class="badge badge-blue">' + esc(lead.logistics_type || '-') + '</span></td><td>' + esc(lead.target_market || '-') + '</td>'
+        + '<td>' + statusBadge + '</td><td>' + owner + '</td><td>' + countdown + '</td>'
+        + '<td>' + action + '<button class="btn btn-outline btn-sm" onclick="openDetailModal(' + lead.id + ')">详情</button></td></tr>';
+    }).join('');
+    const values = document.querySelectorAll('.stats-grid .stat-card .value');
+    const counts = [leads.length, leads.filter(item => item.lead_status === 0).length, leads.filter(item => item.lead_status === 1).length, leads.filter(item => item.lead_status === 2).length];
+    values.forEach((node, index) => { if (counts[index] !== undefined) node.textContent = counts[index]; });
+    if (typeof window.applyFilters === 'function') window.applyFilters();
+  }
+
+  function activityList(customer) {
+    const items = customerActivities[customer.id] || [];
+    if (!items.length && customer.latest_follow) return [{ content: customer.latest_follow.content, created_by: customer.latest_follow.created_by, created_at: customer.last_followup_at, activity_type: 'follow' }];
+    return items;
+  }
+  function showCustomerDetail(id) {
+    const customer = customers.find(item => Number(item.id) === Number(id));
+    if (!customer || typeof window.openModal !== 'function') return;
+    const activities = activityList(customer);
+    const activityHtml = activities.length ? activities.map(item => '<div style="padding:10px 0;border-bottom:1px solid var(--border);"><div><span class="badge badge-blue">' + esc(item.activity_type || '跟进') + '</span><span style="float:right;color:var(--text-secondary);font-size:12px;">' + esc(item.created_at || '-') + '</span></div><div style="margin-top:7px;">' + esc(item.content) + '</div><div style="font-size:12px;color:var(--text-secondary);margin-top:4px;">记录人：' + esc(item.created_by || '张晓明') + '</div></div>').join('') : '<div class="muted" style="padding:20px;text-align:center;">暂无跟进记录</div>';
+    window.openModal('<div style="max-height:72vh;overflow:auto;"><h3>' + esc(customer.company_name) + '</h3>'
+      + '<div style="display:flex;gap:6px;margin:8px 0 16px;flex-wrap:wrap;">' + (customer.tags || []).map(tag => '<span class="mini-tag blue">' + esc(tag) + '</span>').join('') + '<span class="mini-tag">' + esc(customer.ownership_label) + '</span></div>'
+      + '<div class="detail-grid"><div class="field"><label>联系人</label><span>' + esc(customer.contact_name || '-') + '</span></div><div class="field"><label>手机号</label><span>' + esc(customer.mobile || '-') + '</span></div><div class="field"><label>负责人</label><span>' + esc(customer.owner || '未分配') + '</span></div><div class="field"><label>跟进状态</label><span>' + esc(customer.follow_status_label || '-') + '</span></div><div class="field"><label>主营品类</label><span>' + esc(customer.main_category || '-') + '</span></div><div class="field"><label>常走路线</label><span>' + esc(customer.usual_routes || '-') + '</span></div></div>'
+      + '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:16px 0;"><div class="panel" style="padding:12px;"><div class="muted">月均货量</div><strong>' + Number(customer.avg_monthly_volume || 0).toFixed(1) + ' 方</strong></div><div class="panel" style="padding:12px;"><div class="muted">月均营收</div><strong>¥' + Number(customer.avg_monthly_revenue || 0).toLocaleString() + '</strong></div><div class="panel" style="padding:12px;"><div class="muted">健康分</div><strong>' + esc(customer.health_score || 0) + '</strong></div></div>'
+      + '<div style="display:flex;justify-content:space-between;align-items:center;margin-top:14px;"><h4>跟进记录</h4><button class="btn btn-primary btn-sm" onclick="openCustomerFollowForm(' + customer.id + ')">+ 添加跟进</button></div><div>' + activityHtml + '</div>'
+      + '<div class="modal-actions"><button class="btn btn-outline" onclick="closeModal()">关闭</button></div></div>');
+  }
+  function openCustomerFollowForm(id) {
+    const customer = customers.find(item => Number(item.id) === Number(id));
+    if (!customer) return;
+    window.openModal('<h3>新增客户跟进</h3><div class="modal-field"><label>客户</label><input value="' + esc(customer.company_name) + '" readonly></div><div class="modal-field"><label>跟进类型</label><select id="staticCustomerActivityType"><option value="电话">电话</option><option value="拜访">拜访</option><option value="会议">会议</option><option value="邮件">邮件</option></select></div><div class="modal-field"><label>跟进内容</label><textarea id="staticCustomerActivityContent" rows="4" placeholder="请输入本次跟进内容"></textarea></div><div class="modal-actions"><button class="btn btn-outline" onclick="showCustomerDetail(' + id + ')">取消</button><button class="btn btn-primary" onclick="saveCustomerFollow(' + id + ')">保存跟进</button></div>');
+  }
+  function saveCustomerFollow(id) {
+    const content = document.getElementById('staticCustomerActivityContent').value.trim();
+    if (!content) return window.showToast('请输入跟进内容', 'error');
+    const type = document.getElementById('staticCustomerActivityType').value;
+    const activity = { id: Date.now(), activity_type: type, content, created_by: '张晓明', created_at: nowText() };
+    customerActivities[id] = [activity].concat(customerActivities[id] || []);
+    customers = customers.map(item => Number(item.id) === Number(id) ? { ...item, latest_follow: { content, created_by: '张晓明' }, last_followup_at: activity.created_at } : item);
+    write('tiantu_admin_customer_activities', customerActivities); saveCustomers();
+    window.showToast('跟进记录已保存');
+    showCustomerDetail(id);
+  }
+
+  function exportCustomers() {
+    const header = ['客户名称', '联系人', '手机号', '负责人', '所属状态', '跟进状态', '最近跟进'];
+    const rows = customers.map(item => [item.customer_name, item.contact_name, item.mobile, item.owner || '', item.ownership_label, item.follow_status_label, item.latest_follow?.content || '']);
+    const csv = '\ufeff' + [header].concat(rows).map(row => row.map(value => '"' + String(value ?? '').replace(/"/g, '""') + '"').join(',')).join('\r\n');
+    const href = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' }));
+    const link = document.createElement('a');
+    link.href = href; link.download = '天图CRM客户列表.csv'; link.click();
+    setTimeout(() => URL.revokeObjectURL(href), 1000);
+    window.showToast('客户列表已导出');
+  }
+  function showManagementAction(name) {
+    if (name === '营销触达') {
+      window.openModal('<h3>营销触达</h3><div class="modal-field"><label>触达渠道</label><select id="marketingChannel"><option>短信</option><option>邮件</option><option>企业微信</option></select></div><div class="modal-field"><label>营销内容</label><textarea id="marketingContent" rows="4" placeholder="请输入营销内容"></textarea></div><div class="modal-actions"><button class="btn btn-outline" onclick="closeModal()">取消</button><button class="btn btn-primary" onclick="saveMarketing()">创建触达任务</button></div>');
+      return;
+    }
+    if (name === '空号检测') {
+      const valid = customers.filter(item => /\d{7,}/.test(String(item.mobile || '').replace(/\D/g, ''))).length;
+      window.openModal('<h3>空号检测结果</h3><div style="padding:18px 0;line-height:2;">已检测 <strong>' + customers.length + '</strong> 个号码<br><span style="color:var(--success);">格式正常：' + valid + ' 个</span><br><span style="color:var(--danger);">需人工复核：' + (customers.length - valid) + ' 个</span></div><div class="modal-actions"><button class="btn btn-primary" onclick="closeModal()">完成</button></div>');
+      return;
+    }
+    if (name === '客户查重') {
+      const duplicates = customers.filter((item, index) => customers.findIndex(other => other.mobile === item.mobile || other.company_name === item.company_name) !== index);
+      window.openModal('<h3>客户查重结果</h3><div style="padding:18px 0;">' + (duplicates.length ? '发现 ' + duplicates.length + ' 条重复数据：' + duplicates.map(item => esc(item.company_name)).join('、') : '<span style="color:var(--success);">未发现重复客户</span>') + '</div><div class="modal-actions"><button class="btn btn-primary" onclick="closeModal()">完成</button></div>');
+      return;
+    }
+    window.openModal('<h3>自定义表格</h3><div style="padding:12px 0;line-height:2;"><label><input type="checkbox" checked> 客户/公司</label><br><label><input type="checkbox" checked> 联系方式</label><br><label><input type="checkbox" checked> 负责人及状态</label><br><label><input type="checkbox" checked> 最近跟进</label></div><div class="modal-actions"><button class="btn btn-primary" onclick="closeModal();showToast(\'表格设置已保存\')">保存</button></div>');
+  }
+  function saveMarketing() {
+    const content = document.getElementById('marketingContent').value.trim();
+    if (!content) return window.showToast('请输入营销内容', 'error');
+    const tasks = read('tiantu_admin_marketing_tasks', []);
+    tasks.unshift({ id: Date.now(), channel: document.getElementById('marketingChannel').value, content, customer_count: customers.length, created_at: nowText() });
+    write('tiantu_admin_marketing_tasks', tasks);
+    window.closeModal(); window.showToast('营销触达任务已创建');
+  }
+
+  const stageLabels = { developing: '开发中', quoted: '已报价', cooperating: '合作中', churned: '已流失' };
+  const lifecycleLabels = { new: '待处理', contacted: '跟进中', disqualified: '无效/关闭', nurturing: '意向客户', quoted: '已报价', negotiating: '商务谈判', trial: '试单中', active: '正式合作', receding: '减量/休眠', churned: '已流失' };
+  let currentOpportunityStage = 'all';
+  function opportunityStyles() {
+    return '<style>.opp-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}.status-tabs{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0 18px}.status-tabs button{padding:7px 15px;border:1px solid var(--border);border-radius:18px;background:#fff;color:var(--text-secondary);cursor:pointer}.status-tabs button.active{background:var(--primary-light);color:#fff;border-color:var(--primary-light)}.status-tabs .warning-tab{border-color:#ef4444;color:#ef4444}.status-tabs .warning-tab.active{background:#ef4444;color:#fff}.customer-card{border-left:4px solid var(--primary-light);margin-bottom:12px}.customer-card.warning{border-left-color:#ef4444;background:#fffafa}.customer-card .panel-header{padding:14px 20px}.card-top{display:flex;justify-content:space-between;gap:12px;align-items:center}.card-name{font-weight:700;font-size:16px}.card-tags{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-top:6px}.opp-grid{display:grid;grid-template-columns:1.2fr 1fr 1.25fr 1fr 1fr;gap:16px}.opp-field .label{font-size:12px;color:var(--text-secondary);margin-bottom:5px}.opp-field .value{font-size:14px;font-weight:500}.status-dropdown-btn{border:1px solid #bfdbfe;background:#eff6ff;color:#2563eb;border-radius:14px;padding:5px 10px;cursor:pointer}.warning-tag{background:#fee2e2;color:#dc2626;border-radius:10px;padding:2px 8px;font-size:11px;font-weight:700}.metric-value{cursor:pointer;color:var(--primary-light)}.trend-up{color:#10b981}.trend-down{color:#ef4444}.trend-bars{height:130px;display:flex;align-items:flex-end;gap:10px;border-bottom:1px solid var(--border);padding:10px}.trend-col{flex:1;text-align:center;font-size:11px}.trend-bar{background:#3b82f6;border-radius:4px 4px 0 0;min-height:5px;margin:4px auto;width:70%}@media(max-width:980px){.opp-grid{grid-template-columns:1fr 1fr}.opp-head,.card-top{align-items:flex-start;flex-direction:column}}</style>';
+  }
+  function renderOpportunityCards() {
+    const list = document.getElementById('opportunityCustomerList');
+    if (!list) return;
+    const keyword = (document.getElementById('opportunitySearch')?.value || '').toLowerCase();
+    const visible = customers.filter(function (customer) {
+      const warning = Number(customer.volume_mom || 0) < -20;
+      if (currentOpportunityStage === 'warning' && !warning) return false;
+      if (!['all', 'warning'].includes(currentOpportunityStage) && stageOf(customer) !== currentOpportunityStage) return false;
+      return !keyword || [customer.company_name, customer.contact_name, customer.main_category, customer.usual_routes].join(' ').toLowerCase().includes(keyword);
+    }).sort((a, b) => Number(b.avg_monthly_revenue || 0) - Number(a.avg_monthly_revenue || 0));
+    list.innerHTML = visible.length ? visible.map(function (customer) {
+      const warning = Number(customer.volume_mom || 0) < -20;
+      const trendClass = Number(customer.volume_mom || 0) >= 0 ? 'trend-up' : 'trend-down';
+      const trendArrow = Number(customer.volume_mom || 0) >= 0 ? '▲' : '▼';
+      return '<div class="panel customer-card ' + (warning ? 'warning' : '') + '"><div class="panel-header" onclick="showCustomerDetail(' + customer.id + ')" style="cursor:pointer;"><div class="card-top"><div><span class="card-name">' + esc(customer.company_name) + '</span><div class="card-tags"><span class="badge badge-blue">' + esc((customer.tags || ['C'])[0]) + '级</span>' + (warning ? '<span class="warning-tag">⚠ 预警</span>' : '') + '<span class="mini-tag">' + stageLabels[stageOf(customer)] + '</span><span style="font-size:11px;color:var(--primary-light);">👤 ' + esc(customer.owner || '未分配') + '</span></div></div><div style="display:flex;gap:6px;"><button class="status-dropdown-btn" onclick="event.stopPropagation();showStatusPicker(' + customer.id + ')">' + esc(lifecycleLabels[customer.lifecycle_status] || customer.lifecycle_status) + ' ▾</button><button class="btn btn-outline btn-sm" onclick="event.stopPropagation();showQuickFollowUp(' + customer.id + ')">+ 跟进</button></div></div></div><div class="panel-body" style="padding:12px 20px 16px;"><div class="opp-grid"><div class="opp-field"><div class="label">主营品类</div><div class="value">' + esc(customer.main_category || '-') + '</div></div><div class="opp-field"><div class="label">发货频率</div><div class="value">' + esc(customer.shipping_frequency || '-') + '</div></div><div class="opp-field"><div class="label">常走路线</div><div class="value">' + esc(customer.usual_routes || '-') + '</div></div><div class="opp-field"><div class="label">月均货量</div><div class="value metric-value" onclick="openVolumeTrend(' + customer.id + ')">' + Number(customer.avg_monthly_volume || 0).toFixed(1) + '方 <span class="' + trendClass + '">' + trendArrow + Math.abs(Number(customer.volume_mom || 0)) + '%</span></div></div><div class="opp-field"><div class="label">月均营收</div><div class="value" onclick="openOrderDrill(' + customer.id + ')" style="cursor:pointer;font-weight:700;">¥' + Number(customer.avg_monthly_revenue || 0).toLocaleString() + '</div></div></div></div></div>';
+    }).join('') : '<div class="panel" style="text-align:center;padding:70px;color:var(--text-secondary);">暂无符合条件的客户数据</div>';
+  }
+  function renderOpportunitiesPage() {
+    const main = document.querySelector('main.main');
+    if (!main) return;
+    const warningCount = customers.filter(customer => Number(customer.volume_mom || 0) < -20).length;
+    main.innerHTML = opportunityStyles() + '<div class="workspace-switch" style="display:flex;gap:8px;align-items:center;margin-bottom:14px;"><a class="btn btn-primary btn-sm" href="' + prefix + '/customers/?view=opportunities">客户与商机</a><a class="btn btn-outline btn-sm" href="' + prefix + '/customers/?view=management">客户管理</a><a class="btn btn-outline btn-sm" href="' + prefix + '/leads/">线索公海池</a></div><div class="opp-head"><h1 style="font-size:22px;">👥 客户与商机管理 <span style="font-size:13px;color:var(--text-secondary);font-weight:400;">PRD V2.0</span></h1><input id="opportunitySearch" placeholder="搜索客户名称/联系人..." oninput="renderOpportunityCards()" style="padding:8px 14px;border:1px solid var(--border);border-radius:8px;width:220px;"></div><div class="status-tabs" id="opportunityTabs"><button class="active" onclick="setOpportunityStage(\'all\',this)">全部</button><button onclick="setOpportunityStage(\'developing\',this)">开发中</button><button onclick="setOpportunityStage(\'quoted\',this)">已报价</button><button onclick="setOpportunityStage(\'cooperating\',this)">合作中</button><button onclick="setOpportunityStage(\'churned\',this)">已流失</button><button class="warning-tab" onclick="setOpportunityStage(\'warning\',this)">⚠ 预警中 <span>' + warningCount + '</span></button></div><div id="opportunityCustomerList"></div>';
+    renderOpportunityCards();
+  }
+  function setOpportunityStage(stage, button) {
+    currentOpportunityStage = stage;
+    document.querySelectorAll('#opportunityTabs button').forEach(node => node.classList.remove('active'));
+    if (button) button.classList.add('active');
+    renderOpportunityCards();
+  }
+  function showStatusPicker(id) {
+    const customer = customers.find(item => Number(item.id) === Number(id));
+    if (!customer) return;
+    const options = [['contacted', '开发中'], ['quoted', '已报价'], ['active', '合作中'], ['churned', '已流失']];
+    window.openModal('<h3>更新客户阶段</h3><div class="muted" style="margin-bottom:12px;">' + esc(customer.company_name) + '</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">' + options.map(option => '<button class="btn ' + (stageOf(customer) === stageOf({ lifecycle_status: option[0] }) ? 'btn-primary' : 'btn-outline') + '" onclick="pickOpportunityStage(' + id + ',\'' + option[0] + '\')">' + option[1] + '</button>').join('') + '</div><div class="modal-actions"><button class="btn btn-outline" onclick="closeModal()">取消</button></div>');
+  }
+  function pickOpportunityStage(id, status) {
+    customers = customers.map(item => Number(item.id) === Number(id) ? { ...item, lifecycle_status: status } : item);
+    saveCustomers(); window.closeModal(); window.showToast('客户阶段已更新'); renderOpportunityCards();
+  }
+  function showQuickFollowUp(id) { openCustomerFollowForm(id); }
+  async function openVolumeTrend(id) {
+    const customer = customers.find(item => Number(item.id) === Number(id));
+    const result = await window.fetch('/api/customers/' + id + '/trend').then(response => response.json());
+    const max = Math.max(1, ...result.trend.map(item => item.volume));
+    const bars = result.trend.map(item => '<div class="trend-col"><div>' + item.volume + '</div><div class="trend-bar" style="height:' + Math.max(5, item.volume / max * 90) + 'px"></div><div>' + item.label + '</div></div>').join('');
+    window.openModal('<h3>📈 ' + esc(customer.company_name) + ' - 近6个月货量走势</h3><div class="trend-bars">' + bars + '</div><div class="modal-actions"><button class="btn btn-outline" onclick="closeModal()">关闭</button></div>');
+  }
+  async function openOrderDrill(id) {
+    const customer = customers.find(item => Number(item.id) === Number(id));
+    const result = await window.fetch('/api/customers/' + id + '/orders').then(response => response.json());
+    const rows = result.orders.map(order => '<tr><td>' + esc(order.tracking_number) + '</td><td>' + esc(order.route) + '</td><td>' + esc(order.status) + '</td><td>' + order.volume_cbm + '方</td><td>¥' + Number(order.revenue).toLocaleString() + '</td></tr>').join('');
+    window.openModal('<h3>📦 ' + esc(customer.company_name) + ' - 近期订单</h3><div class="table-wrap"><table><thead><tr><th>运单号</th><th>线路</th><th>状态</th><th>货量</th><th>营收</th></tr></thead><tbody>' + rows + '</tbody></table></div><div class="modal-actions"><button class="btn btn-outline" onclick="closeModal()">关闭</button></div>');
+  }
+
+  Object.assign(window, { showCustomerDetail, openCustomerFollowForm, saveCustomerFollow, saveMarketing, renderOpportunityCards, setOpportunityStage, showStatusPicker, pickOpportunityStage, showQuickFollowUp, openVolumeTrend, openOrderDrill });
 
   document.addEventListener('DOMContentLoaded', function () {
     document.querySelectorAll('a[href^="/"], link[href^="/"], img[src^="/"]').forEach(function (node) {
@@ -96,8 +486,15 @@
       const value = node.getAttribute('onclick');
       node.setAttribute('onclick', value.replace(/location\.href='\//g, "location.href='" + prefix + '/'));
     });
+    window.openCustomer = showCustomerDetail;
+    window.exportList = exportCustomers;
+    window.placeholderAction = showManagementAction;
+    if (document.getElementById('leadTableBody')) renderLeadPage();
+    if (/\/customers\/?$/.test(location.pathname) && new URLSearchParams(location.search).get('view') === 'opportunities') {
+      renderOpportunitiesPage();
+    }
     const badge = document.createElement('div');
-    badge.textContent = '静态演示版 · 数据保存在当前浏览器';
+    badge.textContent = '静态完整功能版 · 数据保存在当前浏览器';
     badge.style.cssText = 'position:fixed;right:16px;bottom:14px;z-index:9999;background:#111827;color:#fff;padding:7px 11px;border-radius:6px;font-size:12px;box-shadow:0 4px 14px #0003';
     document.body.appendChild(badge);
   });

@@ -650,10 +650,12 @@ el('keywordInput').addEventListener('input', () => {
   searchTimer = setTimeout(reloadFirstPage, 300);
 });
 
-renderTabs();
-renderBulkActions();
-updateFilterHelp();
-fetchData();
+if (new URLSearchParams(location.search).get('view') !== 'opportunities') {
+  renderTabs();
+  renderBulkActions();
+  updateFilterHelp();
+  fetchData();
+}
 </script>
 
   </main>
