@@ -162,6 +162,30 @@ tr:hover td { background:#f8fafc; }
 .spark-line { height:40px; display:flex; align-items:flex-end; gap:3px; }
 .spark-line .bar { flex:1; background:var(--primary-light); border-radius:2px 2px 0 0; opacity:.8; min-height:3px; }
 
+/* APP-side operation entries */
+.operation-banner { display:grid; grid-template-columns:minmax(0,1.7fr) minmax(260px,.8fr); gap:16px; margin-bottom:20px; }
+.campaign-strip { position:relative; overflow:hidden; min-height:138px; padding:24px; border-radius:8px; color:#fff; background:linear-gradient(115deg,#123454 0%,#176b87 58%,#0f766e 100%); }
+.campaign-strip::after { content:'SEA  RAIL  AIR'; position:absolute; right:22px; bottom:8px; font-size:25px; font-weight:800; color:rgba(255,255,255,.13); letter-spacing:2px; }
+.campaign-kicker { font-size:12px; color:#a7f3d0; margin-bottom:6px; }
+.campaign-title { font-size:22px; font-weight:700; }
+.campaign-copy { max-width:560px; margin-top:6px; font-size:13px; color:rgba(255,255,255,.78); }
+.campaign-tags { display:flex; gap:8px; margin-top:14px; flex-wrap:wrap; }
+.campaign-tags span { padding:4px 9px; border:1px solid rgba(255,255,255,.24); border-radius:4px; font-size:11px; background:rgba(255,255,255,.08); }
+.todo-summary { padding:20px; border-radius:8px; background:#fff; box-shadow:var(--shadow); }
+.todo-summary h3 { font-size:15px; margin-bottom:14px; }
+.todo-line { display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid var(--border); font-size:13px; }
+.todo-line:last-child { border-bottom:0; }
+.todo-count { min-width:25px; height:25px; padding:0 7px; display:inline-flex; align-items:center; justify-content:center; border-radius:13px; font-weight:700; background:#eff6ff; color:#1d4ed8; }
+.quick-panel { margin-bottom:20px; }
+.quick-grid { display:grid; grid-template-columns:repeat(7,minmax(94px,1fr)); gap:10px; }
+.quick-entry { min-height:88px; padding:13px 9px; border:1px solid var(--border); border-radius:6px; background:#fff; color:var(--text); text-align:center; cursor:pointer; transition:border-color .2s,box-shadow .2s,transform .2s; }
+.quick-entry:hover { border-color:#93c5fd; box-shadow:0 4px 12px rgba(15,23,42,.08); transform:translateY(-1px); }
+.quick-entry .quick-icon { display:block; font-size:22px; margin-bottom:5px; }
+.quick-entry strong { display:block; font-size:13px; }
+.quick-entry small { display:block; font-size:10px; color:var(--text-secondary); margin-top:2px; }
+@media(max-width:1100px) { .quick-grid { grid-template-columns:repeat(4,1fr); } }
+@media(max-width:760px) { .operation-banner { grid-template-columns:1fr; } .quick-grid { grid-template-columns:repeat(2,1fr); } }
+
 </style>
 </head>
 <body>
@@ -181,11 +205,11 @@ tr:hover td { background:#f8fafc; }
       <a href="/tiantu-crm-admin/web/customers/" class="">
         <span class="icon">👥</span> 客户管理与商机
       </a>
-      <a href="/tiantu-crm-admin/web/quotation/" class="">
-        <span class="icon">💰</span> 报价管理
+      <a href="/tiantu-crm-admin/web/inquiry/" class="">
+        <span class="icon">💰</span> 询价与报价
       </a>
       <a href="/tiantu-crm-admin/web/tracking/" class="">
-        <span class="icon">📍</span> 轨迹与客服
+        <span class="icon">📍</span> 运踪与异常
       </a>
       <a href="/tiantu-crm-admin/web/risk/" class="">
         <span class="icon">🛡️</span> 风控授信
@@ -201,6 +225,9 @@ tr:hover td { background:#f8fafc; }
         <span class="icon">🤖</span> AI智能助手
         <span class="sidebar-badge">AI</span>
       </a>
+      <a href="/tiantu-crm-admin/web/settings/" class="">
+        <span class="icon">⚙️</span> 我的 / 系统参数
+      </a>
     </nav>
     <div style="position:absolute;bottom:20px;left:20px;right:20px;font-size:11px;color:rgba(255,255,255,.4);">
       结合纷享销客 ShareAI · 天图架构
@@ -209,6 +236,34 @@ tr:hover td { background:#f8fafc; }
   <main class="main">
     
 <h1 style="margin-bottom:20px;font-size:22px;">📊 经营仪表盘</h1>
+
+<section class="operation-banner" aria-label="渠道活动和待办概览">
+  <div class="campaign-strip">
+    <div class="campaign-kicker">旺季渠道推荐 · 08/17 更新</div>
+    <div class="campaign-title">美森快船 / 中欧班列 / 东南亚空派</div>
+    <div class="campaign-copy">同步 APP 端活动位，集中展示可销售渠道、舱位动态与价格时效，便于管理人员快速安排报价和客户触达。</div>
+    <div class="campaign-tags"><span>美西 11-13天</span><span>欧洲铁路稳舱</span><span>东南亚次日达</span></div>
+  </div>
+  <div class="todo-summary">
+    <h3>今日业务待办</h3>
+    <div class="todo-line"><span>待核价询价</span><span class="todo-count">3</span></div>
+    <div class="todo-line"><span>异常运单</span><span class="todo-count" style="background:#fef2f2;color:#dc2626;">3</span></div>
+    <div class="todo-line"><span>即将回收线索</span><span class="todo-count" style="background:#fff7ed;color:#c2410c;">2</span></div>
+  </div>
+</section>
+
+<section class="panel quick-panel">
+  <div class="panel-header">APP 业务快捷入口 <span class="text-sm">管理端统一办理</span></div>
+  <div class="panel-body quick-grid">
+    <button class="quick-entry" onclick="openAdminTab('inquiry')"><span class="quick-icon">＋</span><strong>下单 / 询价</strong><small>创建业务需求</small></button>
+    <button class="quick-entry" onclick="openAdminTab('inquiry')"><span class="quick-icon">￥</span><strong>报价服务</strong><small>核价与分享</small></button>
+    <button class="quick-entry" onclick="openAdminTab('customers')"><span class="quick-icon">品</span><strong>品名管理</strong><small>客户货品档案</small></button>
+    <button class="quick-entry" onclick="openAdminTab('tracking')"><span class="quick-icon">仓</span><strong>预留仓位</strong><small>运力与节点跟踪</small></button>
+    <button class="quick-entry" onclick="showToast('打卡状态已记录')"><span class="quick-icon">✓</span><strong>团队打卡</strong><small>当日拜访签到</small></button>
+    <button class="quick-entry" onclick="openAdminTab('tracking')"><span class="quick-icon">单</span><strong>客服工单</strong><small>异常协同处理</small></button>
+    <button class="quick-entry" onclick="openAdminTab('settings')"><span class="quick-icon">待</span><strong>规则与待办</strong><small>回收规则配置</small></button>
+  </div>
+</section>
 
 <div class="stats-grid">
   <div class="stat-card">
@@ -461,10 +516,11 @@ new Chart(document.getElementById('trendChart'), {
     frame.src = '/tiantu-crm-admin/web/' + route + '/';
     if (shouldPush) history.replaceState(null, '', '/tiantu-crm-admin/web/?tab=' + route);
   }
+  window.openAdminTab = function (route) { activate(route, true); };
   navLinks.forEach(function (link) {
     link.addEventListener('click', function (event) {
       var href = link.getAttribute('href') || '';
-      var match = href.match(/\/web\/(leads|customers|moments)\/?$/);
+      var match = href.match(/\/web\/(leads|customers|moments|inquiry|tracking|settings)\/?$/);
       var isDashboard = /\/web\/?$/.test(href);
       if (match || isDashboard) {
         event.preventDefault();
@@ -473,11 +529,10 @@ new Chart(document.getElementById('trendChart'), {
     });
   });
   var initial = new URLSearchParams(location.search).get('tab');
-  activate(['leads', 'customers', 'moments'].includes(initial) ? initial : 'dashboard', false);
+  activate(['leads', 'customers', 'moments', 'inquiry', 'tracking', 'settings'].includes(initial) ? initial : 'dashboard', false);
 })();
 </script>
 
 </body>
 </html>
-
 

@@ -68,6 +68,25 @@
     { id: 4, user_id: 3, user: { id: 3, name: '李强', phone: '13800138002' }, type: 'ACTIVITY', content: '盐田至鹿特丹线本周成功首航！感谢运营团队的全力配合，客户反馈时效满意度提升明显。', media_urls: [prefix + '/static/uploads/moment_warehouse7.jpg', prefix + '/static/uploads/moment_cargo3.jpg'], visible_type: 'DEPT', visible_target: [2], created_at: '2026-08-12 14:07:24', like_count: 2, user_liked: true, comments: [] },
   ];
 
+  const seedInquiries = [
+    { id: 1001, inquiry_no: 'XJ20260817001', customer_name: '深圳思科达电子有限公司', contact_name: '陈总', route: '深圳 - 洛杉矶', transport_mode: '美森快船', cargo_desc: '蓝牙耳机（带电）', weight_kg: 1280, volume_cbm: 8.6, status: 'pricing', status_label: '核价中', owner: '张晓明', created_at: '2026-08-17 09:20', remark: '希望本周五前入仓' },
+    { id: 1002, inquiry_no: 'XJ20260816006', customer_name: '义乌欧凯进出口有限公司', contact_name: '王芳', route: '义乌 - 杜伊斯堡', transport_mode: '中欧班列', cargo_desc: '家居百货', weight_kg: 3560, volume_cbm: 15.2, status: 'quoted', status_label: '已出价', owner: '李强', created_at: '2026-08-16 14:05', remark: '含税到门' },
+    { id: 1003, inquiry_no: 'XJ20260816002', customer_name: '厦门拓海家居用品有限公司', contact_name: '高经理', route: '厦门 - 汉堡', transport_mode: '海派', cargo_desc: '折叠收纳架', weight_kg: 2200, volume_cbm: 12.4, status: 'new', status_label: '待受理', owner: '王芳', created_at: '2026-08-16 10:18', remark: '需提供普船和快船两个方案' },
+  ];
+  const seedQuotations = [
+    { id: 2001, quotation_no: 'BJ20260816008', inquiry_id: 1002, customer_name: '义乌欧凯进出口有限公司', route: '义乌 - 杜伊斯堡', channel: '中欧班列', currency: 'CNY', amount: 28600, validity: '2026-08-23', status: 'sent', status_label: '已发送', created_at: '2026-08-16 16:40' },
+    { id: 2002, quotation_no: 'BJ20260815012', inquiry_id: 998, customer_name: '深圳星链跨境电商有限公司', route: '深圳 - 洛杉矶', channel: '美国空派', currency: 'CNY', amount: 12600, validity: '2026-08-20', status: 'accepted', status_label: '客户接受', created_at: '2026-08-15 11:22' },
+    { id: 2003, quotation_no: 'BJ20260814005', inquiry_id: 991, customer_name: 'AmazonSeller-DE GmbH', route: '深圳 - 汉堡', channel: '欧洲海派', currency: 'CNY', amount: 43800, validity: '2026-08-18', status: 'expired', status_label: '即将到期', created_at: '2026-08-14 13:10' },
+  ];
+  const seedOrders = [
+    { id: 3001, tracking_number: 'SCD202608001US', customer_name: '深圳思科达电子有限公司', route_detail: '深圳 - 美森快船 - 洛杉矶', origin: '深圳仓', destination: '洛杉矶仓', cargo_desc: '消费电子', weight_kg: 5680, volume_cbm: 31.5, status: 'transit', status_label: '海运在途', progress: 62, etd: '2026-08-10', eta: '2026-08-22', latest_event: '太平洋航行中，预计 8 月 19 日抵达长滩港', subscribed: true, exception_type: null, created_at: '2026-08-09 17:20', events: [{ event_type:'transit', location:'太平洋', description:'船舶航行正常，下一节点为长滩港', time:'2026-08-17 08:30' },{ event_type:'departure', location:'盐田港', description:'船舶已离港', time:'2026-08-10 22:15' },{ event_type:'warehouse', location:'深圳仓', description:'货物完成装柜并放行', time:'2026-08-09 16:40' }] },
+    { id: 3002, tracking_number: 'OKE202608003DE', customer_name: '义乌欧凯进出口有限公司', route_detail: '义乌 - 中欧班列 - 杜伊斯堡', origin: '义乌站', destination: '杜伊斯堡站', cargo_desc: '家居百货', weight_kg: 7200, volume_cbm: 28.4, status: 'rail_transit', status_label: '铁路在途', progress: 48, etd: '2026-08-08', eta: '2026-08-26', latest_event: '已出阿拉山口，班列运行正常', subscribed: false, exception_type: null, created_at: '2026-08-07 12:10', events: [{ event_type:'transit', location:'哈萨克斯坦', description:'班列境外段运行中', time:'2026-08-16 18:05' },{ event_type:'customs', location:'阿拉山口', description:'完成换装及口岸放行', time:'2026-08-13 09:30' },{ event_type:'departure', location:'义乌站', description:'班列发车', time:'2026-08-08 14:20' }] },
+    { id: 3003, tracking_number: 'NBY202608002NL', customer_name: '宁波远洋国际贸易有限公司', route_detail: '宁波 - 海运 - 鹿特丹', origin: '宁波港', destination: '鹿特丹港', cargo_desc: '机械配件', weight_kg: 12600, volume_cbm: 42.8, status: 'customs', status_label: '目的港清关', progress: 82, etd: '2026-07-24', eta: '2026-08-16', latest_event: '鹿特丹海关查验，等待补充申报资料', subscribed: true, exception_type: '海关查验', exception_level: 'severe', created_at: '2026-07-23 09:35', events: [{ event_type:'exception', location:'鹿特丹港', description:'海关查验，要求补充产品用途及材质申报', time:'2026-08-16 10:25' },{ event_type:'arrival', location:'鹿特丹港', description:'船舶靠港并完成卸柜', time:'2026-08-15 21:10' },{ event_type:'departure', location:'宁波港', description:'船舶离港', time:'2026-07-24 18:40' }] },
+    { id: 3004, tracking_number: 'HTF202608006FR', customer_name: '广州恒通服装贸易有限公司', route_detail: '广州 - 空运 - 巴黎', origin: '广州机场', destination: '巴黎戴高乐机场', cargo_desc: '服装', weight_kg: 860, volume_cbm: 5.1, status: 'air_transit', status_label: '空运在途', progress: 70, etd: '2026-08-15', eta: '2026-08-18', latest_event: '航班因天气延误 9 小时', subscribed: false, exception_type: '航班延误', exception_level: 'warning', created_at: '2026-08-14 15:00', events: [{ event_type:'exception', location:'迪拜机场', description:'受天气影响，中转航班预计延误 9 小时', time:'2026-08-17 06:20' },{ event_type:'departure', location:'广州机场', description:'航班已起飞', time:'2026-08-15 23:30' },{ event_type:'warehouse', location:'广州机场仓', description:'安检完成', time:'2026-08-15 17:45' }] },
+    { id: 3005, tracking_number: 'ADE202608004DE', customer_name: 'AmazonSeller-DE GmbH', route_detail: '汉堡港 - 卡车 - FRA3', origin: '汉堡港', destination: 'Amazon FRA3', cargo_desc: 'FBA 商品', weight_kg: 3850, volume_cbm: 20.2, status: 'last_mile', status_label: '尾程派送中', progress: 92, etd: '2026-08-01', eta: '2026-08-18', latest_event: '卡车已提柜，预约 8 月 18 日送仓', subscribed: false, exception_type: '预约延后', exception_level: 'warning', created_at: '2026-07-31 10:10', events: [{ event_type:'delivery', location:'汉堡', description:'卡车提柜，等待 Amazon 预约时段', time:'2026-08-17 07:50' },{ event_type:'exception', location:'Amazon FRA3', description:'原预约取消，已改约至 8 月 18 日', time:'2026-08-16 15:30' },{ event_type:'customs', location:'汉堡港', description:'清关完成', time:'2026-08-15 11:20' }] },
+  ];
+  const seedConfig = { reclaim_no_follow_days: '7', reclaim_no_convert_days: '30', claim_daily_limit: '5', claim_private_limit: '50' };
+
   const clone = value => JSON.parse(JSON.stringify(value));
   function read(key, seed) {
     try {
@@ -132,6 +151,10 @@
   }
 
   let customerActivities = read('tiantu_admin_customer_activities', {});
+  let inquiries = read('tiantu_admin_inquiries', seedInquiries);
+  let quotations = read('tiantu_admin_quotations', seedQuotations);
+  let orders = read('tiantu_admin_orders', seedOrders);
+  let systemConfig = read('tiantu_admin_config', seedConfig);
   leads.forEach(function (lead) {
     if (!leadFollowUps[lead.id]) {
       leadFollowUps[lead.id] = lead.latest_follow ? [{
@@ -346,6 +369,51 @@
       return jsonResponse({ ok: true, customer_name: customer.company_name, risk_level: riskLevel, risk_color: riskColor, risk_action: riskLevel === '高' ? '建议立即安排客户拜访，核查货量下滑和回款风险。' : riskLevel === '中' ? '建议本周完成一次有效跟进并更新下一步计划。' : '客户状态稳定，建议结合旺季计划推动增购与交叉销售。', insights, score_breakdown: { 货量表现: Math.max(0, Math.min(100, 70 + Number(customer.volume_mom || 0))), 回款表现: Number(customer.credit?.days_aged || 0) > 60 ? 45 : 85, 活跃互动: Math.min(100, 55 + Number(customer.monthly_order_count || 0) * 4) } });
     }
     if (path === '/api/reminders/list') return jsonResponse({ ok: true, reminders: [], total: 0 });
+    if (path === '/api/inquiries/list' && method === 'GET') {
+      const status = url.searchParams.get('status') || '';
+      const keyword = (url.searchParams.get('keyword') || '').toLowerCase();
+      const items = inquiries.filter(item => (!status || item.status === status) && (!keyword || [item.inquiry_no, item.customer_name, item.route, item.cargo_desc].join(' ').toLowerCase().includes(keyword)));
+      return jsonResponse({ ok: true, inquiries: items, total: items.length });
+    }
+    if (path === '/api/inquiries/create' && method === 'POST') {
+      const item = { ...body, id: Date.now(), inquiry_no: 'XJ' + new Date().toISOString().slice(0,10).replaceAll('-','') + String(inquiries.length + 1).padStart(3,'0'), status: 'new', status_label: '待受理', owner: body.owner || '张晓明', created_at: nowText().replace('T',' ') };
+      inquiries = [item, ...inquiries]; write('tiantu_admin_inquiries', inquiries);
+      return jsonResponse({ ok: true, inquiry: item, msg: '询价已创建' });
+    }
+    if (/^\/api\/inquiries\/\d+\/urge$/.test(path) && method === 'POST') {
+      const id = Number(path.split('/')[3]);
+      inquiries = inquiries.map(item => item.id === id ? { ...item, status: 'pricing', status_label: '核价中', urged_at: nowText() } : item);
+      write('tiantu_admin_inquiries', inquiries);
+      return jsonResponse({ ok: true, msg: '已通知商务和操作加急核价' });
+    }
+    if (path === '/api/quotations/list' && method === 'GET') return jsonResponse({ ok: true, quotations, total: quotations.length });
+    if (path === '/api/orders/list' && method === 'GET') {
+      const status = url.searchParams.get('status') || '';
+      const keyword = (url.searchParams.get('keyword') || '').toLowerCase();
+      const items = orders.filter(item => (!status || item.status === status) && (!keyword || [item.tracking_number, item.customer_name, item.route_detail, item.cargo_desc].join(' ').toLowerCase().includes(keyword)));
+      return jsonResponse({ ok: true, orders: items, total: items.length });
+    }
+    if (path === '/api/orders/exceptions' && method === 'GET') {
+      const items = orders.filter(item => item.exception_type);
+      return jsonResponse({ ok: true, orders: items, total: items.length, stats: { severe: items.filter(item => item.exception_level === 'severe').length, warning: items.filter(item => item.exception_level !== 'severe').length } });
+    }
+    if (/^\/api\/orders\/\d+\/subscribe$/.test(path) && method === 'POST') {
+      const id = Number(path.split('/')[3]);
+      orders = orders.map(item => item.id === id ? { ...item, subscribed: !item.subscribed } : item);
+      write('tiantu_admin_orders', orders);
+      const item = orders.find(order => order.id === id);
+      return jsonResponse({ ok: true, subscribed: Boolean(item?.subscribed), msg: item?.subscribed ? '已订阅节点变化提醒' : '已取消订阅' });
+    }
+    if (/^\/api\/tracking\/\d+$/.test(path) && method === 'GET') {
+      const id = Number(path.split('/')[3]);
+      const item = orders.find(order => order.id === id || order.tracking_number === path.split('/')[3]);
+      return item ? jsonResponse({ ok: true, order: item, events: item.events || [] }) : jsonResponse({ ok: false, msg: '运单不存在' }, 404);
+    }
+    if (path === '/api/config' && method === 'GET') return jsonResponse({ ok: true, config: systemConfig });
+    if (path === '/api/config' && method === 'POST') {
+      systemConfig = { ...systemConfig, ...body }; write('tiantu_admin_config', systemConfig);
+      return jsonResponse({ ok: true, config: systemConfig, msg: '配置已保存' });
+    }
     if (path === '/api/v1/crm/moments' && method === 'GET') {
       const moments = read('tiantu_admin_moments', seedMoments);
       return jsonResponse({ ok: true, items: moments, total: moments.length, page: 1, page_size: 50, has_more: false });
@@ -615,4 +683,3 @@
     hydrateOpportunityPage();
   });
 })();
-
