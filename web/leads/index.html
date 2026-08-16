@@ -77,8 +77,9 @@
 .stat-card.public { border-left:3px solid var(--text-secondary); }
 .stat-card.private { border-left:3px solid var(--primary-light); }
 .stat-card.converted { border-left:3px solid var(--success); }
-.lead-workbench-modal { width:min(94vw, 1080px); max-width:1080px; max-height:90vh; padding:0; overflow:hidden; border-radius:8px; }
-.lead-workbench { max-height:90vh; overflow-y:auto; background:#f8fafc; }
+.lead-detail-page { display:none; width:100%; min-height:calc(100vh - 48px); background:#f8fafc; }
+.lead-detail-page.show { display:block; }
+.lead-workbench { min-height:calc(100vh - 48px); background:#f8fafc; }
 .lead-detail-head { display:flex; align-items:flex-start; justify-content:space-between; gap:18px; padding:22px 24px; background:#fff; border-bottom:1px solid var(--border); }
 .lead-detail-title { font-size:20px; font-weight:700; color:#0f172a; }
 .lead-detail-meta { display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-top:7px; color:#64748b; font-size:12px; }
@@ -117,6 +118,7 @@
 @media(max-width:820px) { .lead-detail-body { grid-template-columns:1fr; } .lead-detail-head { flex-direction:column; } .lead-head-actions { justify-content:flex-start; } }
 </style>
 
+<div id="leadListPage">
 <div class="flex-between mb-4">
   <h1 style="font-size:22px;">🎯 线索与公海池</h1>
   <div style="display:flex;gap:8px;">
@@ -439,6 +441,9 @@
   <span>|</span>
   <span>📊 认领限制: 每日5条 / 私海上限50条</span>
 </div>
+</div>
+
+<section id="leadDetailPage" class="lead-detail-page" aria-label="线索详情"></section>
 
 <script>
 // ═══════════════════════════════════════════
@@ -637,9 +642,14 @@ async function claimLead(leadId) {
 // 线索详情 — 含跟进记录 (PRD 3.3)
 // ═══════════════════════════════════════════
 async function openDetailModal(leadId, openFollowForm) {
-  openModal('<div style="text-align:center;padding:40px;">加载中...</div>');
+  var listPage = document.getElementById('leadListPage');
+  var detailPage = document.getElementById('leadDetailPage');
+  listPage.style.display = 'none';
+  detailPage.classList.add('show');
+  detailPage.innerHTML = '<div style="text-align:center;padding:80px;color:#64748b;">加载线索详情...</div>';
+  window.scrollTo({ top:0, behavior:'auto' });
   var r = await apiGet('/api/leads/' + leadId);
-  if (!r.ok) { showToast('线索不存在', 'error'); closeModal(); return; }
+  if (!r.ok) { showToast('线索不存在', 'error'); closeLeadDetail(); return; }
   var lead = r.lead;
   var followUps = r.follow_ups;
   var statusBadge = lead.lead_status === 0 ? 'badge-gray' : lead.lead_status === 1 ? 'badge-blue' : 'badge-green';
@@ -654,7 +664,7 @@ async function openDetailModal(leadId, openFollowForm) {
   if (lead.lead_status === 0) html += '<button class="btn btn-primary btn-sm" onclick="claimLeadFromDetail(' + leadId + ')">认领线索</button>';
   if (lead.lead_status === 1) html += '<button class="btn btn-outline btn-sm" onclick="showFollowUpForm(' + leadId + ')">+ 跟进</button><button class="btn btn-success btn-sm" onclick="showConvertConfirm(' + leadId + ')">转客户 / 商机</button>';
   if (lead.lead_status === 2) html += '<button class="btn btn-primary btn-sm" onclick="openCustomerWorkspace()">进入客户与商机</button>';
-  html += '<button class="lead-close" title="关闭" onclick="closeModal()">×</button></div></header>'
+  html += '<button class="btn btn-outline btn-sm" onclick="closeLeadDetail()">← 返回线索列表</button></div></header>'
     + '<div class="lead-detail-body"><aside><section class="lead-detail-card"><div class="lead-card-title"><span>线索画像</span><span class="badge badge-blue">' + htmlEscapeLead(lead.logistics_type || '待确认') + '</span></div><div class="lead-card-body">'
     + '<div class="lead-metrics"><div class="lead-metric"><strong>' + Number(lead.follow_count || 0) + '</strong><span>跟进次数</span></div><div class="lead-metric"><strong>' + htmlEscapeLead(lead.target_market || '-') + '</strong><span>目标市场</span></div><div class="lead-metric"><strong>' + countdown + '</strong><span>回收倒计时</span></div></div>'
     + '<div class="lead-profile"><div><label>联系人</label><strong>' + htmlEscapeLead(lead.contact_name || '-') + '</strong></div><div><label>联系电话</label><strong style="font-family:ui-monospace,monospace;">' + htmlEscapeLead(lead.contact_mobile || '-') + '</strong></div><div class="wide"><label>联系邮箱</label><strong>' + htmlEscapeLead(lead.email || '-') + '</strong></div><div><label>线索来源</label><strong>' + htmlEscapeLead(lead.source || '-') + '</strong></div><div><label>归属销售</label><strong>' + htmlEscapeLead(lead.owner || '暂无（公海）') + '</strong></div><div><label>物流偏好</label><strong>' + htmlEscapeLead(lead.logistics_type || '-') + '</strong></div><div><label>国家 / 市场</label><strong>' + htmlEscapeLead(lead.country || lead.target_market || '-') + '</strong></div><div class="wide"><label>意向产品 / 需求</label><strong>' + htmlEscapeLead(lead.product_interest || lead.latest_follow?.content || '待进一步沟通确认') + '</strong></div></div>'
@@ -672,10 +682,17 @@ async function openDetailModal(leadId, openFollowForm) {
     html += '</div>';
   }
   html += '</div></section></div></div>';
-  var modal = document.getElementById('modalContent');
-  modal.classList.add('lead-workbench-modal');
-  modal.innerHTML = html;
+  detailPage.innerHTML = html;
   if (openFollowForm && lead.lead_status === 1) setTimeout(function() { showFollowUpForm(leadId); }, 0);
+}
+
+function closeLeadDetail() {
+  var listPage = document.getElementById('leadListPage');
+  var detailPage = document.getElementById('leadDetailPage');
+  detailPage.classList.remove('show');
+  detailPage.innerHTML = '';
+  listPage.style.display = '';
+  window.scrollTo({ top:0, behavior:'auto' });
 }
 
 function htmlEscapeLead(value) {
@@ -830,13 +847,11 @@ function previewFullImage(url) {
 <script>
 // ── Modal utils ──
 function openModal(html) {
-  document.getElementById('modalContent').classList.remove('lead-workbench-modal');
   document.getElementById('modalContent').innerHTML = html;
   document.getElementById('modalOverlay').classList.add('show');
 }
 function closeModal() {
   document.getElementById('modalOverlay').classList.remove('show');
-  document.getElementById('modalContent').classList.remove('lead-workbench-modal');
 }
 document.getElementById('modalOverlay').addEventListener('click', function(e) {
   if (e.target === this) closeModal();
