@@ -77,6 +77,44 @@
 .stat-card.public { border-left:3px solid var(--text-secondary); }
 .stat-card.private { border-left:3px solid var(--primary-light); }
 .stat-card.converted { border-left:3px solid var(--success); }
+.lead-workbench-modal { width:min(94vw, 1080px); max-width:1080px; max-height:90vh; padding:0; overflow:hidden; border-radius:8px; }
+.lead-workbench { max-height:90vh; overflow-y:auto; background:#f8fafc; }
+.lead-detail-head { display:flex; align-items:flex-start; justify-content:space-between; gap:18px; padding:22px 24px; background:#fff; border-bottom:1px solid var(--border); }
+.lead-detail-title { font-size:20px; font-weight:700; color:#0f172a; }
+.lead-detail-meta { display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-top:7px; color:#64748b; font-size:12px; }
+.lead-head-actions { display:flex; align-items:center; gap:8px; flex-wrap:wrap; justify-content:flex-end; }
+.lead-close { width:32px; height:32px; display:inline-flex; align-items:center; justify-content:center; border:1px solid var(--border); border-radius:6px; background:#fff; color:#64748b; font-size:20px; cursor:pointer; }
+.lead-detail-body { display:grid; grid-template-columns:340px minmax(0,1fr); gap:16px; padding:16px; }
+.lead-detail-card { background:#fff; border:1px solid var(--border); border-radius:7px; overflow:hidden; }
+.lead-card-title { padding:13px 16px; border-bottom:1px solid var(--border); font-size:14px; font-weight:700; display:flex; align-items:center; justify-content:space-between; }
+.lead-card-body { padding:15px 16px; }
+.lead-profile { display:grid; grid-template-columns:1fr 1fr; gap:14px 12px; }
+.lead-profile .wide { grid-column:1/-1; }
+.lead-profile label { display:block; font-size:11px; color:#94a3b8; margin-bottom:3px; }
+.lead-profile strong { display:block; font-size:13px; color:#334155; overflow-wrap:anywhere; }
+.lead-metrics { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:14px; }
+.lead-metric { padding:11px 8px; text-align:center; background:#f8fafc; border-radius:5px; }
+.lead-metric strong { display:block; font-size:18px; color:#0f172a; }
+.lead-metric span { display:block; margin-top:2px; font-size:10px; color:#94a3b8; }
+.lead-risk { padding:12px; border-radius:5px; background:#fff7ed; color:#9a3412; font-size:12px; line-height:1.65; }
+.lead-risk.normal { background:#f0fdf4; color:#166534; }
+.lead-timeline { position:relative; }
+.lead-timeline-item { position:relative; padding:0 0 18px 27px; }
+.lead-timeline-item::before { content:''; position:absolute; left:4px; top:5px; width:10px; height:10px; border-radius:50%; background:#2563eb; box-shadow:0 0 0 4px #dbeafe; }
+.lead-timeline-item::after { content:''; position:absolute; left:8px; top:19px; bottom:0; width:2px; background:#e2e8f0; }
+.lead-timeline-item:last-child::after { display:none; }
+.lead-timeline-top { display:flex; justify-content:space-between; gap:12px; align-items:center; }
+.lead-timeline-content { margin-top:6px; color:#334155; font-size:13px; line-height:1.65; }
+.lead-timeline-meta { display:flex; gap:14px; flex-wrap:wrap; margin-top:7px; color:#94a3b8; font-size:11px; }
+.lead-follow-form { padding:16px; margin-bottom:15px; border:1px solid #bfdbfe; border-radius:7px; background:#f8fbff; }
+.lead-form-title { display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; font-size:14px; color:#1d4ed8; font-weight:700; }
+.lead-form-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.lead-form-field label { display:block; margin-bottom:5px; font-size:11px; color:#64748b; }
+.lead-form-field input,.lead-form-field select,.lead-form-field textarea { width:100%; padding:9px 10px; border:1px solid var(--border); border-radius:6px; font:inherit; background:#fff; }
+.lead-form-field.full { grid-column:1/-1; }
+.lead-form-actions { display:flex; justify-content:flex-end; gap:8px; margin-top:12px; }
+.lead-empty { padding:38px 20px; text-align:center; color:#94a3b8; font-size:13px; }
+@media(max-width:820px) { .lead-detail-body { grid-template-columns:1fr; } .lead-detail-head { flex-direction:column; } .lead-head-actions { justify-content:flex-start; } }
 </style>
 
 <div class="flex-between mb-4">
@@ -171,7 +209,7 @@
           </td>
           <td>
             
-            <button class="btn btn-outline btn-sm" onclick="openDetailModal(3)">跟进</button>
+            <button class="btn btn-outline btn-sm" onclick="openDetailModal(3, true)">跟进</button>
             
             <button class="btn btn-outline btn-sm" onclick="openDetailModal(3)">详情</button>
           </td>
@@ -263,7 +301,7 @@
           </td>
           <td>
             
-            <button class="btn btn-outline btn-sm" onclick="openDetailModal(6)">跟进</button>
+            <button class="btn btn-outline btn-sm" onclick="openDetailModal(6, true)">跟进</button>
             
             <button class="btn btn-outline btn-sm" onclick="openDetailModal(6)">详情</button>
           </td>
@@ -353,7 +391,7 @@
           </td>
           <td>
             
-            <button class="btn btn-outline btn-sm" onclick="openDetailModal(1)">跟进</button>
+            <button class="btn btn-outline btn-sm" onclick="openDetailModal(1, true)">跟进</button>
             
             <button class="btn btn-outline btn-sm" onclick="openDetailModal(1)">详情</button>
           </td>
@@ -598,68 +636,77 @@ async function claimLead(leadId) {
 // ═══════════════════════════════════════════
 // 线索详情 — 含跟进记录 (PRD 3.3)
 // ═══════════════════════════════════════════
-async function openDetailModal(leadId) {
+async function openDetailModal(leadId, openFollowForm) {
   openModal('<div style="text-align:center;padding:40px;">加载中...</div>');
   var r = await apiGet('/api/leads/' + leadId);
   if (!r.ok) { showToast('线索不存在', 'error'); closeModal(); return; }
   var lead = r.lead;
   var followUps = r.follow_ups;
-
-  var html = '<div style="max-height:70vh;overflow-y:auto;">'
-    + '<h3>' + lead.company_name + '</h3>'
-    + '<p style="font-size:13px;color:var(--text-secondary);margin-bottom:16px;">'
-    + '<span class="badge badge-blue">' + lead.lead_status_label + '</span> '
-    + '创建于 ' + (lead.created_at || '').slice(0, 10) + ' · 跟进' + lead.follow_count + '次'
-    + '</p>';
-
-  // 基本信息
-  html += '<div class="detail-grid" style="margin-bottom:16px;">'
-    + '<div class="field"><label>联系人</label><span>' + (lead.contact_name || '-') + '</span></div>'
-    + '<div class="field"><label>手机号</label><span style="font-family:monospace;">' + lead.contact_mobile + '</span></div>'
-    + '<div class="field"><label>邮箱</label><span>' + (lead.email || '-') + '</span></div>'
-    + '<div class="field"><label>物流偏好</label><span>' + (lead.logistics_type || '-') + '</span></div>'
-    + '<div class="field"><label>目标市场</label><span>' + (lead.target_market || '-') + '</span></div>'
-    + '<div class="field"><label>来源</label><span>' + (lead.source || '-') + '</span></div>'
-    + '<div class="field"><label>归属销售</label><span>' + (lead.owner || '无(公海)') + '</span></div>';
-
-  // 回收倒计时
-  if (lead.reclaim_countdown_hours !== null) {
-    var cls = lead.reclaim_countdown_hours < 24 ? 'countdown-urgent' : 'countdown-warn';
-    html += '<div class="field"><label>回收倒计时</label><span class="' + cls + '" style="font-family:monospace;font-size:16px;">⏱ 剩 ' + lead.reclaim_countdown_hours + ' 小时</span></div>';
-  } else {
-    html += '<div class="field"><label>回收倒计时</label><span style="color:var(--text-secondary);">-</span></div>';
-  }
-  html += '</div>';
-
-  // 操作按钮 (仅私海)
-  if (lead.lead_status === 1) {
-    html += '<div style="display:flex;gap:8px;margin-bottom:16px;">'
-      + '<button class="btn btn-primary btn-sm" onclick="showFollowUpForm(' + leadId + ')">+ 添加跟进</button>'
-      + '<button class="btn btn-success btn-sm" onclick="showConvertConfirm(' + leadId + ')">一键转化</button>'
-      + '</div>'
-      + '<div id="followUpFormArea"></div>'
-      + '<div id="convertConfirmArea"></div>';
-  }
-
-  // 跟进记录列表
-  html += '<h4 style="margin-top:16px;">跟进记录 (' + followUps.length + ')</h4>';
+  var statusBadge = lead.lead_status === 0 ? 'badge-gray' : lead.lead_status === 1 ? 'badge-blue' : 'badge-green';
+  var poolName = lead.lead_status === 0 ? '公司公海' : lead.lead_status === 1 ? '销售私海' : '已完成转化';
+  var countdown = lead.reclaim_countdown_hours !== null ? lead.reclaim_countdown_hours + ' 小时' : '-';
+  var riskClass = lead.reclaim_countdown_hours !== null && lead.reclaim_countdown_hours < 48 ? '' : ' normal';
+  var riskText = lead.lead_status === 0 ? '当前线索在公司公海，认领后才可以新增跟进和发起转化。' : lead.lead_status === 2 ? '该线索已完成转化，可在客户管理与商机页面继续维护。' : lead.reclaim_countdown_hours < 48 ? '线索临近自动回收，请尽快完成有效跟进以重置回收倒计时。' : '线索处于正常保护期，新增有效跟进后将重新计算回收时间。';
+  var html = '<div class="lead-workbench">'
+    + '<header class="lead-detail-head"><div><div class="lead-detail-title">' + htmlEscapeLead(lead.company_name) + '</div>'
+    + '<div class="lead-detail-meta"><span class="badge ' + statusBadge + '">' + htmlEscapeLead(lead.lead_status_label) + '</span><span>' + poolName + '</span><span>创建于 ' + formatLeadTime(lead.created_at, true) + '</span></div></div>'
+    + '<div class="lead-head-actions">';
+  if (lead.lead_status === 0) html += '<button class="btn btn-primary btn-sm" onclick="claimLeadFromDetail(' + leadId + ')">认领线索</button>';
+  if (lead.lead_status === 1) html += '<button class="btn btn-outline btn-sm" onclick="showFollowUpForm(' + leadId + ')">+ 跟进</button><button class="btn btn-success btn-sm" onclick="showConvertConfirm(' + leadId + ')">转客户 / 商机</button>';
+  if (lead.lead_status === 2) html += '<button class="btn btn-primary btn-sm" onclick="openCustomerWorkspace()">进入客户与商机</button>';
+  html += '<button class="lead-close" title="关闭" onclick="closeModal()">×</button></div></header>'
+    + '<div class="lead-detail-body"><aside><section class="lead-detail-card"><div class="lead-card-title"><span>线索画像</span><span class="badge badge-blue">' + htmlEscapeLead(lead.logistics_type || '待确认') + '</span></div><div class="lead-card-body">'
+    + '<div class="lead-metrics"><div class="lead-metric"><strong>' + Number(lead.follow_count || 0) + '</strong><span>跟进次数</span></div><div class="lead-metric"><strong>' + htmlEscapeLead(lead.target_market || '-') + '</strong><span>目标市场</span></div><div class="lead-metric"><strong>' + countdown + '</strong><span>回收倒计时</span></div></div>'
+    + '<div class="lead-profile"><div><label>联系人</label><strong>' + htmlEscapeLead(lead.contact_name || '-') + '</strong></div><div><label>联系电话</label><strong style="font-family:ui-monospace,monospace;">' + htmlEscapeLead(lead.contact_mobile || '-') + '</strong></div><div class="wide"><label>联系邮箱</label><strong>' + htmlEscapeLead(lead.email || '-') + '</strong></div><div><label>线索来源</label><strong>' + htmlEscapeLead(lead.source || '-') + '</strong></div><div><label>归属销售</label><strong>' + htmlEscapeLead(lead.owner || '暂无（公海）') + '</strong></div><div><label>物流偏好</label><strong>' + htmlEscapeLead(lead.logistics_type || '-') + '</strong></div><div><label>国家 / 市场</label><strong>' + htmlEscapeLead(lead.country || lead.target_market || '-') + '</strong></div><div class="wide"><label>意向产品 / 需求</label><strong>' + htmlEscapeLead(lead.product_interest || lead.latest_follow?.content || '待进一步沟通确认') + '</strong></div></div>'
+    + '<div class="lead-risk' + riskClass + '" style="margin-top:15px;">' + riskText + '</div></div></section><div id="convertConfirmArea" style="margin-top:12px;"></div></aside>'
+    + '<section class="lead-detail-card"><div class="lead-card-title"><span>跟进动态</span><span style="font-size:12px;color:#64748b;font-weight:400;">共 ' + followUps.length + ' 条</span></div><div class="lead-card-body"><div id="followUpFormArea"></div>';
   if (followUps.length === 0) {
-    html += '<p style="color:var(--text-secondary);text-align:center;padding:20px;">暂无跟进记录</p>';
+    html += '<div class="lead-empty">暂无跟进记录，认领后可创建第一条有效跟进。</div>';
   } else {
+    html += '<div class="lead-timeline">';
     followUps.forEach(function(fu) {
-      html += '<div class="follow-item">'
-        + '<span class="badge badge-blue">' + (fu.status || '跟进') + '</span>'
-        + '<span style="font-size:12px;color:var(--text-secondary);float:right;">' + (fu.created_at || '').slice(0,16).replace('T',' ') + '</span>'
-        + '<p style="margin-top:8px;font-size:14px;">' + fu.content + '</p>'
-        + (fu.image_urls ? (function() { try { var imgs = JSON.parse(fu.image_urls); var h = '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;">'; imgs.forEach(function(url) { h += '<img src="' + url + '" style="width:72px;height:72px;border-radius:6px;object-fit:cover;cursor:pointer;" onclick="previewFullImage(\'' + url + '\')" title="点击放大">'; }); return h + '</div>'; } catch(e) { return ''; } })() : '')
-        + '<div class="meta"><span>跟进人: ' + (fu.created_by || '-') + '</span>'
-        + (fu.next_follow_at ? '<span>下次跟进: ' + fu.next_follow_at.slice(0,16).replace('T',' ') + '</span>' : '')
-        + '</div></div>';
+      html += '<article class="lead-timeline-item"><div class="lead-timeline-top"><span class="badge badge-blue">' + htmlEscapeLead(fu.status || '跟进') + '</span><span style="font-size:11px;color:#94a3b8;">' + formatLeadTime(fu.created_at) + '</span></div><div class="lead-timeline-content">' + htmlEscapeLead(fu.content || '-') + '</div>'
+        + renderFollowImages(fu.image_urls)
+        + '<div class="lead-timeline-meta"><span>跟进人：' + htmlEscapeLead(fu.created_by || '-') + '</span>' + (fu.next_follow_at ? '<span>下次跟进：' + formatLeadTime(fu.next_follow_at) + '</span>' : '') + '</div></article>';
     });
+    html += '</div>';
   }
-  html += '<div class="modal-actions"><button class="btn btn-outline" onclick="closeModal()">关闭</button></div>';
-  html += '</div>';
-  document.getElementById('modalContent').innerHTML = html;
+  html += '</div></section></div></div>';
+  var modal = document.getElementById('modalContent');
+  modal.classList.add('lead-workbench-modal');
+  modal.innerHTML = html;
+  if (openFollowForm && lead.lead_status === 1) setTimeout(function() { showFollowUpForm(leadId); }, 0);
+}
+
+function htmlEscapeLead(value) {
+  return String(value == null ? '' : value).replace(/[&<>"']/g, function(c) { return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; });
+}
+
+function formatLeadTime(value, dateOnly) {
+  if (!value) return '-';
+  var text = String(value).slice(0, dateOnly ? 10 : 16).replace('T', ' ');
+  return text || '-';
+}
+
+function renderFollowImages(value) {
+  if (!value) return '';
+  try {
+    var items = typeof value === 'string' ? JSON.parse(value) : value;
+    if (!Array.isArray(items) || !items.length) return '';
+    return '<div style="display:flex;gap:7px;flex-wrap:wrap;margin-top:9px;">' + items.map(function(url) { var src = String(url).indexOf('/static/') === 0 ? '/tiantu-crm-admin/web' + url : url; return '<img src="' + htmlEscapeLead(src) + '" style="width:64px;height:64px;border-radius:6px;object-fit:cover;cursor:pointer;" onclick="previewFullImage(this.src)" title="点击放大">'; }).join('') + '</div>';
+  } catch (_) { return ''; }
+}
+
+async function claimLeadFromDetail(leadId) {
+  var r = await fetch('/api/leads/' + leadId + '/claim', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({user_id:1,user_name:'张晓明'}) }).then(function(res){ return res.json(); });
+  if (!r.ok) return showToast(r.msg || '认领失败', 'error');
+  showToast('认领成功，可以开始跟进');
+  openDetailModal(leadId, true);
+}
+
+function openCustomerWorkspace() {
+  if (window.parent && window.parent !== window && window.parent.openAdminTab) window.parent.openAdminTab('customers');
+  else location.href = '/tiantu-crm-admin/web/customers/';
 }
 
 // ═══════════════════════════════════════════
@@ -667,25 +714,14 @@ async function openDetailModal(leadId) {
 // ═══════════════════════════════════════════
 function showFollowUpForm(leadId) {
   var area = document.getElementById('followUpFormArea');
-  area.innerHTML = '<div style="background:#f0f7ff;padding:16px;border-radius:8px;border:1px solid #bfdbfe;">'
-    + '<h4 style="font-size:14px;color:var(--primary-light);margin-bottom:12px;">新增跟进记录</h4>'
-    + '<select id="fuStatus" style="width:100%;margin-bottom:8px;padding:8px;border:1px solid var(--border);border-radius:6px;">'
-    + '<option value="未联系">未联系</option><option value="初步沟通">初步沟通</option><option value="意向强烈">意向强烈</option><option value="暂无意向">暂无意向</option><option value="无效信息">无效信息</option></select>'
-    + '<textarea id="fuContent" rows="3" placeholder="跟进内容描述..." style="width:100%;margin-bottom:8px;padding:8px;border:1px solid var(--border);border-radius:6px;resize:vertical;"></textarea>'
-    + '<div style="display:flex;gap:8px;align-items:center;margin-bottom:8px;">'
-    + '<label style="font-size:13px;">下次跟进时间:</label>'
-    + '<input type="datetime-local" id="fuNextTime" style="padding:6px;border:1px solid var(--border);border-radius:6px;font-size:13px;">'
-    + '</div>'
-    + '<div style="margin-bottom:8px;">'
-    + '<label style="font-size:13px;display:block;margin-bottom:4px;">图片附件（可选）:</label>'
-    + '<input type="file" id="fuImages" multiple accept="image/*" style="font-size:13px;" onchange="previewFollowImages(this)">'
-    + '<div id="fuImagePreview" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;"></div>'
-    + '<input type="hidden" id="fuImageUrls" value="">'
-    + '</div>'
-    + '<div style="display:flex;gap:8px;">'
-    + '<button class="btn btn-primary btn-sm" onclick="doFollowUp(' + leadId + ')">保存跟进</button>'
-    + '<button class="btn btn-outline btn-sm" onclick="document.getElementById(\'followUpFormArea\').innerHTML=\'\'">取消</button>'
-    + '</div></div>';
+  if (!area) return;
+  area.innerHTML = '<div class="lead-follow-form"><div class="lead-form-title"><span>新增跟进记录</span><button class="lead-close" style="width:26px;height:26px;font-size:16px;" onclick="document.getElementById(\'followUpFormArea\').innerHTML=\'\'">×</button></div><div class="lead-form-grid">'
+    + '<div class="lead-form-field"><label>跟进阶段</label><select id="fuStatus"><option value="未联系">未联系</option><option value="初步沟通">初步沟通</option><option value="意向强烈">意向强烈</option><option value="暂无意向">暂无意向</option><option value="无效信息">无效信息</option></select></div>'
+    + '<div class="lead-form-field"><label>下次跟进时间</label><input type="datetime-local" id="fuNextTime"></div>'
+    + '<div class="lead-form-field full"><label>跟进内容</label><textarea id="fuContent" rows="4" placeholder="记录客户需求、沟通结论和下一步计划"></textarea></div>'
+    + '<div class="lead-form-field full"><label>图片附件（可选）</label><input type="file" id="fuImages" multiple accept="image/*" onchange="previewFollowImages(this)"><div id="fuImagePreview" style="display:flex;gap:7px;flex-wrap:wrap;margin-top:7px;"></div><input type="hidden" id="fuImageUrls" value=""></div></div>'
+    + '<div class="lead-form-actions"><button class="btn btn-outline btn-sm" onclick="document.getElementById(\'followUpFormArea\').innerHTML=\'\'">取消</button><button class="btn btn-primary btn-sm" onclick="doFollowUp(' + leadId + ')">保存跟进</button></div></div>';
+  area.scrollIntoView({ behavior:'smooth', block:'nearest' });
 }
 
 async function previewFollowImages(input) {
@@ -794,11 +830,13 @@ function previewFullImage(url) {
 <script>
 // ── Modal utils ──
 function openModal(html) {
+  document.getElementById('modalContent').classList.remove('lead-workbench-modal');
   document.getElementById('modalContent').innerHTML = html;
   document.getElementById('modalOverlay').classList.add('show');
 }
 function closeModal() {
   document.getElementById('modalOverlay').classList.remove('show');
+  document.getElementById('modalContent').classList.remove('lead-workbench-modal');
 }
 document.getElementById('modalOverlay').addEventListener('click', function(e) {
   if (e.target === this) closeModal();

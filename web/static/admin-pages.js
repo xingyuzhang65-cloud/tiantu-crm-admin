@@ -229,7 +229,8 @@
       const id = Number(path.split('/').pop());
       const lead = leads.find(item => item.id === id);
       if (!lead) return jsonResponse({ ok: false, msg: '线索不存在' }, 404);
-      return jsonResponse({ ok: true, lead: { ...lead, reclaim_countdown_hours: lead.lead_status === 1 ? 168 : null }, follow_ups: leadFollowUps[id] || [] });
+      const detailLead = referenceData.lead_details?.[id]?.lead || {};
+      return jsonResponse({ ok: true, lead: { ...detailLead, ...lead, reclaim_countdown_hours: lead.lead_status === 1 ? (lead.reclaim_countdown_hours ?? 168) : null }, follow_ups: leadFollowUps[id] || [] });
     }
     if (path === '/api/leads/create' && method === 'POST') {
       const duplicate = leads.find(item => item.contact_mobile === body.contact_mobile || item.company_name === body.company_name);
@@ -456,7 +457,7 @@
       cells[6].innerHTML = status === 0 ? '<span class="badge badge-gray">🌊 公海</span>' : status === 1 ? '<span class="badge badge-blue">🔒 私海</span>' : '<span class="badge badge-green">✅ 已转化</span>';
       cells[7].innerHTML = lead.owner ? esc(lead.owner) : '<span style="color:var(--text-secondary);">-</span>';
       cells[8].innerHTML = status === 1 ? '<span class="countdown-warn" style="font-family:monospace;">⏱ 剩 168h</span>' : status === 2 ? '<span style="color:var(--success);font-size:12px;">已转化</span>' : '<span style="color:var(--text-secondary);">-</span>';
-      cells[9].innerHTML = (status === 0 ? '<button class="btn btn-primary btn-sm" onclick="claimLead(' + lead.id + ')">认领</button> ' : status === 1 ? '<button class="btn btn-outline btn-sm" onclick="openDetailModal(' + lead.id + ')">跟进</button> ' : '') + '<button class="btn btn-outline btn-sm" onclick="openDetailModal(' + lead.id + ')">详情</button>';
+      cells[9].innerHTML = (status === 0 ? '<button class="btn btn-primary btn-sm" onclick="claimLead(' + lead.id + ')">认领</button> ' : status === 1 ? '<button class="btn btn-outline btn-sm" onclick="openDetailModal(' + lead.id + ', true)">跟进</button> ' : '') + '<button class="btn btn-outline btn-sm" onclick="openDetailModal(' + lead.id + ')">详情</button>';
     });
     const values = document.querySelectorAll('.stats-grid .stat-card .value');
     const counts = [leads.length, leads.filter(item => item.lead_status === 0).length, leads.filter(item => item.lead_status === 1).length, leads.filter(item => item.lead_status === 2).length];
